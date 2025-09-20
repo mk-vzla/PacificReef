@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pacific Reef - Cliente</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="clientDashboard" class="view active">
+    <nav class="sidebar">
+      <div class="sidebar-header"><i class="fas fa-umbrella-beach"></i><h2>Pacific Reef</h2></div>
+      <ul class="sidebar-menu">
+        <li><a href="#" data-section="client-dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#" data-section="my-reservations"><i class="fas fa-calendar-check"></i> Mis Reservas</a></li>
+        <li><a href="#" data-section="payment-history"><i class="fas fa-credit-card"></i> Pagos</a></li>
+        <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Perfil</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="clientLogoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+      </div>
+    </nav>
+    <main class="main-content">
+      <header class="top-bar">
+        <h1 id="clientPageTitle">Dashboard</h1>
+        <div class="user-info"><span>Bienvenido</span><div class="user-avatar" id="clientAvatar">C</div></div>
+      </header>
+      <div class="content-area">
+        <section id="client-dashboard" class="content-section active">
+          <div class="welcome-banner"><h2>Bienvenido a Pacific Reef Hotel</h2></div>
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h3>Reservas Activas</h3><p class="stat-number" id="activeReservationsCount">0</p></div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-suitcase"></i></div><div class="stat-info"><h3>Estancias Totales</h3><p class="stat-number" id="totalStaysCount">0</p></div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-star"></i></div><div class="stat-info"><h3>Puntos</h3><p class="stat-number" id="loyaltyPointsCount">0</p></div></div>
+          </div>
+          <div class="integrated-search">
+            <h2 style="margin-top:8px; color:#f1f5f9; font-size:20px;">Buscar Habitaciones</h2>
+            <div class="search-panel">
+              <div class="search-fields">
+                <div class="field">
+                  <label for="checkInDate">Check In</label>
+                  <div class="input-icon"><i class="fas fa-calendar-alt"></i><input type="date" id="checkInDate"></div>
+                </div>
+                <div class="field">
+                  <label for="checkOutDate">Check Out</label>
+                  <div class="input-icon"><i class="fas fa-calendar-check"></i><input type="date" id="checkOutDate"></div>
+                </div>
+                <div class="field">
+                  <label for="guests">Huéspedes</label>
+                  <div class="input-icon"><i class="fas fa-users"></i><input type="number" id="guests" value="2" min="1"></div>
+                </div>
+                <div class="field action">
+                  <button class="btn-primary block" id="searchRoomsBtn"><i class="fas fa-search"></i> Buscar</button>
+                </div>
+              </div>
+              <div class="search-hint"><i class="fas fa-info-circle"></i> Ajusta las fechas y huéspedes. Los precios son por noche.</div>
+            </div>
+            <div id="featuredRooms" class="featured-rooms-inline" style="margin-top:28px;"></div>
+            <div id="roomsGrid" class="rooms-grid enhanced" style="margin-top:20px;"></div>
+            <div id="featuredSuites" class="featured-suites" style="margin-top:32px;"></div>
+          </div>
+        </section>
+        <section id="my-reservations" class="content-section">
+          <h2>Mis Reservas</h2>
+          <div id="clientReservationsList"></div>
+        </section>
+        <section id="payment-history" class="content-section">
+          <h2>Pagos</h2>
+          <div id="paymentCardsContainer" class="payments-list"></div>
+        </section>
+        <section id="profile" class="content-section">
+          <h2>Perfil</h2>
+          <form id="profileForm" class="profile-form">
+            <div class="form-row" style="flex-wrap:wrap; gap:16px;">
+              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
+                <label for="firstName" style="font-size:12px;font-weight:600;">Nombre</label>
+                <input id="firstName" name="firstName" placeholder="Nombre">
+              </div>
+              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
+                <label for="lastName" style="font-size:12px;font-weight:600;">Apellido</label>
+                <input id="lastName" name="lastName" placeholder="Apellido">
+              </div>
+            </div>
+            <div class="form-row" style="flex-wrap:wrap; gap:16px; margin-top:12px;">
+              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
+                <label for="email" style="font-size:12px;font-weight:600;">Email</label>
+                <input id="email" name="email" placeholder="Email">
+              </div>
+              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
+                <label for="phone" style="font-size:12px;font-weight:600;">Teléfono</label>
+                <input id="phone" name="phone" placeholder="Teléfono">
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; margin-top:12px;">
+              <label for="address" style="font-size:12px;font-weight:600;">Dirección</label>
+              <textarea id="address" name="address" placeholder="Dirección" rows="3"></textarea>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn-primary" type="submit">Guardar</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Autologin cliente mock
+    const clientAutoUser = { role:'client', name:'Cliente Demo', email:'client@pacificreef.com' };
+    localStorage.setItem('isLoggedIn','true');
+    localStorage.setItem('userRole','client');
+    localStorage.setItem('user', JSON.stringify(clientAutoUser));
+  </script>
+  <script src="js/client.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof initializeClientDashboard === 'function') {
+        try { initializeClientDashboard(); } catch(e){ console.error('Init client error', e); }
+      }
+      document.getElementById('clientLogoutBtn').addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
+    });
+  </script>
+</body>
+</html>

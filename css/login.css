@@ -1,0 +1,222 @@
+/* Login View Styles */
+#loginView {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    padding: 40px;
+    text-align: center;
+}
+
+.hotel-logo {
+    margin-bottom: 32px;
+}
+
+.hotel-logo i {
+    font-size: 48px;
+    color: var(--primary-color);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.hotel-logo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin: 0;
+}
+
+.login-form {
+    text-align: left;
+}
+
+.login-form .form-group {
+    margin-bottom: 24px;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 14px;
+}
+
+.login-form input,
+.login-form select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: var(--transition);
+    background-color: white;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.login-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 8px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+}
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+.login-footer {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.login-footer p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.login-footer p:first-child {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 12px;
+}
+
+.login-footer strong {
+    color: var(--primary-color);
+}
+
+/* Loading state for login button */
+.login-btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.login-btn.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid transparent;
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error states */
+.login-form .form-group.error input,
+.login-form .form-group.error select {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.error-message {
+    background-color: #fef2f2;
+    color: var(--danger-color);
+    padding: 12px 16px;
+    border-radius: var(--border-radius);
+    border: 1px solid #fecaca;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+/* Success states */
+.success-message {
+    background-color: #f0fdf4;
+    color: var(--success-color);
+    padding: 12px 16px;
+    border-radius: var(--border-radius);
+    border: 1px solid #bbf7d0;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: none;
+}
+
+.success-message.show {
+    display: block;
+}
+
+/* Responsive design for login */
+@media (max-width: 480px) {
+    .login-container {
+        max-width: 100%;
+    }
+    
+    .login-card {
+        padding: 32px 24px;
+        margin: 0 8px;
+    }
+    
+    .hotel-logo h1 {
+        font-size: 24px;
+    }
+    
+    .hotel-logo i {
+        font-size: 40px;
+    }
+}
+
+/* Forgot password link */
+.forgot-password {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.forgot-password a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+    color: var(--primary-dark);
+}

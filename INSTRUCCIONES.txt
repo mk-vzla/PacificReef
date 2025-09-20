@@ -1,0 +1,46 @@
+🏨 PACIFIC REEF HOTEL MANAGEMENT SYSTEM
+==========================================
+
+✅ PROBLEMA DE RED SOLUCIONADO!
+
+🛠️ PROBLEMA IDENTIFICADO:
+   ❌ El archivo api.js tenía llamadas fetch() a this.baseUrl (undefined)
+   ❌ Esto causaba errores de red "A network error occurred"
+   ✅ Reemplazado con API 100% mock (sin llamadas de red)
+
+📋 INSTRUCCIONES PARA USAR:
+
+OPCIÓN 1 - Live Server (Recomendado):
+1. Abre VS Code en esta carpeta
+2. Instala la extensión "Live Server" si no la tienes
+3. Haz clic derecho en "index.html" 
+4. Selecciona "Open with Live Server"
+5. ¡El sistema se abrirá automáticamente en tu navegador!
+
+OPCIÓN 2 - Servidor Python (Probado):
+1. Abre terminal en esta carpeta
+2. Ejecuta: python -m http.server 8080
+3. Abre navegador en: http://localhost:8080
+
+🔐 CREDENCIALES:
+   👤 Cliente: client / client123
+   👨‍💼 Admin: admin / admin123
+
+📁 ESTRUCTURA FINAL LIMPIA:
+   ├── index.html (Aplicación principal - ROOT)
+   ├── css/ (Estilos)
+   ├── js/ (JavaScript - API 100% MOCK)
+   ├── assets/ (Recursos)
+   ├── backend/ (Java Spring Boot - opcional)
+   ├── analytics/ (Python - opcional)
+   └── database/ (Configuración BD - opcional)
+
+🎯 CAMBIOS REALIZADOS:
+   ✅ Eliminados archivos de demo y test
+   ✅ Frontend consolidado en directorio raíz
+   ✅ index.html corregido para Live Server
+   ✅ README simplificado
+   ✅ Estructura limpia y organizada
+   ✅ API.JS CORREGIDO - Solo datos mock, SIN LLAMADAS DE RED
+
+🚀 ¡Sistema FUNCIONAL sin errores de red!

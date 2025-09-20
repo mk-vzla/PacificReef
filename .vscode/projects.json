@@ -1,0 +1,12 @@
+[
+    {
+        "name": "Hotel Management Backend",
+        "rootPath": "./backend",
+        "folders": []
+    },
+    {
+        "name": "Frontend",
+        "rootPath": "./frontend",
+        "folders": []
+    }
+]

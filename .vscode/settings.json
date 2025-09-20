@@ -1,0 +1,38 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.import.gradle.enabled": false,
+    "java.import.maven.enabled": true,
+    "java.autobuild.enabled": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.maxConcurrentBuilds": 1,
+    "java.codeGeneration.insertionLocation": "beforeCursor",
+    "java.sources.organizeImports.staticStarThreshold": 99,
+    "java.sources.organizeImports.starThreshold": 99,
+    "java.server.launchMode": "Standard",
+    "java.validation.enabled": true,
+    "java.errors.incompleteClasspath.severity": "warning",
+    "java.completion.enabled": true,
+    "java.format.enabled": true,
+    "java.signatureHelp.enabled": true,
+    "java.semanticHighlighting.enabled": true,
+    "files.exclude": {
+        "backend/**": false,
+        "analytics/**": true,
+        "database/**": true,
+        "**/.metadata": true,
+        "**/bin": true,
+        "**/target": true,
+        "**/.settings": true,
+        "**/.vscode": false
+    },
+    "search.exclude": {
+        "backend/target/**": true,
+        "backend/.metadata/**": true,
+        "analytics/**": true,
+        "database/**": true
+    },
+    "redhat.java.validation.enabled": true,
+    "java.enabled": true,
+    "maven.executable.path": "mvn",
+    "maven.terminal.useJavaHome": true
+}

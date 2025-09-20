@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pacific Reef - Admin</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="adminDashboard" class="view active">
+    <!-- Reutilizamos exactamente el bloque del dashboard admin desde index -->
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-umbrella-beach"></i>
+        <h2>Pacific Reef</h2>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#" data-section="rooms"><i class="fas fa-bed"></i> Habitaciones</a></li>
+        <li><a href="#" data-section="reservations"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+        <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
+        <li><a href="#" data-section="reports"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+      </div>
+    </nav>
+
+    <main class="main-content">
+      <header class="top-bar">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="user-info">
+          <span>Bienvenido, Administrador</span>
+          <div class="user-avatar">A</div>
+        </div>
+      </header>
+      <div class="content-area">
+        <!-- Simplificado: solo dashboard principal (puedes copiar el resto si lo necesitas) -->
+        <section id="dashboard" class="content-section active">
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-bed"></i></div><div class="stat-info"><h3>Habitaciones Totales</h3><p class="stat-number" id="statTotalRooms">0</p></div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h3>Reservas Activas</h3><p class="stat-number" id="statActiveRes">0</p></div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><h3>Huéspedes Totales</h3><p class="stat-number" id="statGuests">0</p></div></div>
+            <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-info"><h3>Ingresos Mensuales</h3><p class="stat-number" id="statRevenue">$0</p></div></div>
+          </div>
+          <div class="dashboard-grid">
+            <div class="card"><h3>Reservas Recientes</h3><div id="recentReservations" class="reservation-list"></div></div>
+            <div class="card"><h3>Disponibilidad Habitaciones</h3><div class="room-status" id="roomStatusSummary"></div></div>
+          </div>
+        </section>
+        <section id="rooms" class="content-section">
+          <div class="section-header"><h2>Gestión de Habitaciones</h2><button class="btn-primary" id="addRoomBtn">Añadir Habitación</button></div>
+          <div class="table-container"><table class="data-table"><thead><tr><th>Nº</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="roomsTableBody"></tbody></table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    // Autologin mock para esta página standalone
+    const adminAutoUser = { role:'admin', name:'Administrador Hotel', email:'admin@pacificreef.com' };
+    localStorage.setItem('isLoggedIn','true');
+    localStorage.setItem('userRole','admin');
+    localStorage.setItem('user', JSON.stringify(adminAutoUser));
+  </script>
+  <script src="js/admin.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof initializeAdminDashboard === 'function') {
+        try { initializeAdminDashboard(); } catch(e){ console.error('Init admin error', e); }
+      }
+      document.getElementById('logoutBtn').addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
+    });
+  </script>
+</body>
+</html>

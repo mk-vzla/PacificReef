@@ -1,0 +1,15 @@
+com\pacificreef\hotel\model\Room$RoomType.class
+com\pacificreef\hotel\controller\AuthController.class
+com\pacificreef\hotel\model\User.class
+com\pacificreef\hotel\HotelManagementApplication.class
+com\pacificreef\hotel\model\Reservation.class
+com\pacificreef\hotel\model\User$Role.class
+com\pacificreef\hotel\repository\UserRepository.class
+com\pacificreef\hotel\dto\LoginResponse.class
+com\pacificreef\hotel\service\AuthService.class
+com\pacificreef\hotel\model\Room.class
+com\pacificreef\hotel\model\User$UserStatus.class
+com\pacificreef\hotel\model\Room$RoomStatus.class
+com\pacificreef\hotel\dto\RegisterRequest.class
+com\pacificreef\hotel\model\Reservation$ReservationStatus.class
+com\pacificreef\hotel\dto\LoginRequest.class
