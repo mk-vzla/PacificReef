@@ -1,4 +1,18 @@
 // API Service - Pure Mock Data Service (No Network Calls)
+/*
+ * ApiService (Mock)
+ * -------------------------------------------------------------
+ * Proporciona datasets en memoria para usuarios, habitaciones y reservas.
+ * Objetivos:
+ *  - Eliminación de dependencias de backend durante desarrollo UI
+ *  - Estructura coherente para futuras integraciones (métodos CRUD async)
+ *  - Generación de códigos de reserva y normalización de estados
+ *  - Filtros simulados sobre arrays locales
+ *
+ * NOTA: Todos los métodos son async para mantener la interfaz futura
+ * con un backend real (permitiendo await sin refactors masivos).
+ * -------------------------------------------------------------
+ */
 class ApiService {
     constructor() {
         this.useMockData = true;

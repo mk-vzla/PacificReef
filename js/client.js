@@ -1,5 +1,24 @@
 // Client Dashboard Module
 // Fallback authManager para página standalone
+/*
+ * ClientDashboard (Frontend Mock)
+ * -------------------------------------------------------------
+ * Gestiona el panel del cliente en frontend con datos mock.
+ * Funcionalidades:
+ *  - Panel de búsqueda y habitaciones destacadas (4 forzadas)
+ *  - Listado y filtrado de reservas del usuario actual
+ *  - Integración de estado de pago dentro de cada reserva
+ *  - Perfil extendido (datos personales, notificaciones, seguridad, pagos)
+ *  - Generación y alineación de códigos PR-YYYY-XXX con admin
+ *  - Botones de acción (Pagar, Anular, Ver Detalles) según estado
+ *
+ * Dependencias globales:
+ *  - apiService (js/api.js)
+ *  - authManager (js/auth.js)
+ *
+ * Asume ejecución dentro de client.html como página dedicada.
+ * -------------------------------------------------------------
+ */
 if (typeof authManager === 'undefined') {
     window.authManager = {
         requireAuth: () => true,

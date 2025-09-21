@@ -1,5 +1,24 @@
 // Admin Dashboard Module
 // Fallback authManager para página standalone
+/*
+ * AdminDashboard (Frontend Mock)
+ * -------------------------------------------------------------
+ * Gestiona panel administrador totalmente en frontend usando apiService
+ * (mock en memoria). Funcionalidades principales:
+ *  - Render y filtros de reservas, habitaciones y usuarios
+ *  - Generación de códigos de reserva PR-YYYY-XXX (orden cronológico)
+ *  - Sección de reportes (estadísticas y cards mock)
+ *  - Estadísticas rápidas de ocupación y estado de reservas
+ *  - Búsqueda dinámica de usuarios
+ *
+ * Dependencias globales esperadas:
+ *  - apiService (js/api.js)
+ *  - authManager (js/auth.js) para control de rol
+ *
+ * NOTA: Este módulo asume ejecución dentro de admin.html (standalone)
+ * y ya no comparte DOM con index.html.
+ * -------------------------------------------------------------
+ */
 if (typeof authManager === 'undefined') {
     window.authManager = {
         requireRole: (role) => {

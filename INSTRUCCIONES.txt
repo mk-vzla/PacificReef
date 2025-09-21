@@ -1,14 +1,15 @@
-🏨 PACIFIC REEF HOTEL MANAGEMENT SYSTEM
-==========================================
+🏨 PACIFIC REEF HOTEL MANAGEMENT SYSTEM (Versión Mock Optimizada)
+================================================================
 
-✅ PROBLEMA DE RED SOLUCIONADO!
+Estado actual: UI 100% mock, sin dependencias de red. Listo para integrar backend real.
 
-🛠️ PROBLEMA IDENTIFICADO:
-   ❌ El archivo api.js tenía llamadas fetch() a this.baseUrl (undefined)
-   ❌ Esto causaba errores de red "A network error occurred"
-   ✅ Reemplazado con API 100% mock (sin llamadas de red)
+🛠️ Antecedente del fix inicial:
+   • api.js antes intentaba usar fetch() → causaba errores de red
+   • Sustituido por servicio mock en memoria (async simulado)
+   • Eliminado código embebido de dashboards en `index.html`
+   • Eliminado `main.js` (no usado tras separación de páginas)
 
-📋 INSTRUCCIONES PARA USAR:
+📋 CÓMO EJECUTAR (Frontend Mock):
 
 OPCIÓN 1 - Live Server (Recomendado):
 1. Abre VS Code en esta carpeta
@@ -17,30 +18,61 @@ OPCIÓN 1 - Live Server (Recomendado):
 4. Selecciona "Open with Live Server"
 5. ¡El sistema se abrirá automáticamente en tu navegador!
 
-OPCIÓN 2 - Servidor Python (Probado):
-1. Abre terminal en esta carpeta
-2. Ejecuta: python -m http.server 8080
-3. Abre navegador en: http://localhost:8080
+OPCIÓN 2 - Servidor Python rápido:
+1. Abrir terminal en raíz
+2. python -m http.server 8080
+3. Ir a: http://localhost:8080
 
 🔐 CREDENCIALES:
    👤 Cliente: client / client123
    👨‍💼 Admin: admin / admin123
 
-📁 ESTRUCTURA FINAL LIMPIA:
-   ├── index.html (Aplicación principal - ROOT)
-   ├── css/ (Estilos)
-   ├── js/ (JavaScript - API 100% MOCK)
-   ├── assets/ (Recursos)
-   ├── backend/ (Java Spring Boot - opcional)
-   ├── analytics/ (Python - opcional)
-   └── database/ (Configuración BD - opcional)
+📁 ESTRUCTURA RELEVANTE:
+   ├── index.html        (Login mínimo)
+   ├── register.html     (Registro mock – redirige sin persistir)
+   ├── admin.html        (Dashboard Admin standalone)
+   ├── client.html       (Dashboard Cliente standalone)
+   ├── js/
+   │   ├── auth.js       (Sesión mock + redirección páginas)
+   │   ├── api.js        (Datos mock: usuarios, habitaciones, reservas)
+   │   ├── admin.js      (Gestión admin: habitaciones, reservas, usuarios, reportes)
+   │   └── client.js     (Búsqueda, reservas filtradas, perfil extendido)
+   ├── css/              (Tema oscuro unificado + componentes)
+   ├── backend/          (Spring Boot – opcional)
+   ├── analytics/        (Python – opcional)
+   └── database/         (Utilidades / backups)
 
-🎯 CAMBIOS REALIZADOS:
-   ✅ Eliminados archivos de demo y test
-   ✅ Frontend consolidado en directorio raíz
-   ✅ index.html corregido para Live Server
-   ✅ README simplificado
-   ✅ Estructura limpia y organizada
-   ✅ API.JS CORREGIDO - Solo datos mock, SIN LLAMADAS DE RED
+🎯 PRINCIPALES CAMBIOS RECIENTES:
+   ✅ Separación total de páginas (login / admin / cliente / registro)
+   ✅ Eliminados dashboards embebidos en index
+   ✅ Refactor auth.js (removidas funciones de vistas internas)
+   ✅ Tema oscuro global estandarizado
+   ✅ Códigos de reserva PR-YYYY-XXX consistentes en admin/cliente
+   ✅ Normalización estado: Cancelada → Anulada
+   ✅ Reportes mock con cards e iconos
+   ✅ Perfil cliente extendido (datos + toggles)
+   ✅ Eliminado main.js obsoleto
+   ✅ Encabezados de documentación en módulos JS
 
-🚀 ¡Sistema FUNCIONAL sin errores de red!
+🧪 PRUEBAS RÁPIDAS:
+   1. Login admin → validar redirección y secciones (Reservas / Habitaciones / Usuarios / Reportes)
+   2. Filtros reservas (estado + quick filters) y orden de códigos
+   3. Filtros habitaciones (estado/tipo/piso) + stats ocupación
+   4. Login cliente → reservas filtradas propias + botones acción
+   5. Editar perfil → refrescar página y confirmar persistencia localStorage
+
+🚀 MIGRACIÓN A BACKEND REAL (Guía breve):
+   1. Implementar endpoints REST reales (usuarios, habitaciones, reservas)
+   2. Sustituir métodos de api.js por fetch/axios
+   3. Reemplazar login mock por POST /auth/login (JWT)
+   4. Propagar token a llamadas subsecuentes
+   5. Eliminar datasets mock al final y validar flujos reales
+
+⚠️ LIMITACIONES (Versión Mock):
+   • No hay persistencia real ni validación robusta
+   • Registro no escribe en backend
+   • Seguridad basada sólo en localStorage
+
+✅ Estado: LISTO PARA DEMO / PROTOTIPO.
+
+🚀 ¡Sistema funcional sin errores de red!

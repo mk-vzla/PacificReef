@@ -1,4 +1,18 @@
-// Authentication Module - VERSIÓN SIMPLIFICADA PARA FIX DE REDIRECCIÓN
+/**
+ * Auth Module (Frontend Mock)
+ * -------------------------------------------------------------
+ * Responsabilidades:
+ *  - Validar credenciales mock (admin / client) sin backend real
+ *  - Persistir sesión mínima en localStorage (isLoggedIn, userRole, user)
+ *  - Redirigir a páginas dedicadas: admin.html o client.html
+ *  - Proveer utilidades simples (requireAuth, hasRole)
+ *  - Mostrar notificaciones de estado
+ *
+ * Se eliminó la lógica antigua de "dashboards embebidos" (showAdminDashboard,
+ * showClientDashboard, redirectToDashboard, hideAllViews) porque ahora cada
+ * dashboard vive en su propio HTML independiente.
+ * -------------------------------------------------------------
+ */
 class AuthManager {
     constructor() {
         this.currentUser = null;
@@ -54,7 +68,7 @@ class AuthManager {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('userRole');
         localStorage.removeItem('user');
-        showLoginView();
+        window.location.href = 'index.html';
     }
 
     isLoggedIn() {
@@ -134,97 +148,9 @@ function handleLogin() {
     return true;
 }
 
-// FUNCIÓN DE REDIRECCIÓN SIMPLIFICADA
-function redirectToDashboard(role) {
-    const roleUpper = (role || '').toUpperCase();
-    console.log('🔄 EJECUTANDO REDIRECCIÓN PARA:', roleUpper);
-    // Ocultar todas las vistas usando función central
-    if (typeof hideAllViews === 'function') {
-        hideAllViews();
-    } else {
-        document.querySelectorAll('.view').forEach(view => view.classList.remove('active'));
-    }
-
-    // Normalizar rol si se guardó en localStorage con otro casing
-    if (!roleUpper) {
-        const storedRole = localStorage.getItem('userRole');
-        console.log('ℹ️ Rol vacío, usando storedRole:', storedRole);
-        if (storedRole) {
-            return redirectToDashboard(storedRole);
-        }
-    }
-
-    if (roleUpper === 'ADMIN') {
-        console.log('🔧 Activando Admin Dashboard...');
-        const adminElement = document.getElementById('adminDashboard');
-        if (adminElement) {
-            adminElement.classList.add('active');
-            document.title = 'Pacific Reef Hotel - Panel de Admin';
-            console.log('✅ ADMIN DASHBOARD ACTIVADO');
-            if (typeof initializeAdminDashboard === 'function') {
-                try { initializeAdminDashboard(); } catch(e){ console.error('Error init admin dashboard', e); }
-            }
-        } else {
-            console.error('❌ adminDashboard no encontrado');
-        }
-    } else if (roleUpper === 'CLIENT') {
-        console.log('👤 Activando Client Dashboard...');
-        const clientElement = document.getElementById('clientDashboard');
-        if (clientElement) {
-            clientElement.classList.add('active');
-            document.title = 'Pacific Reef Hotel - Mi Dashboard';
-            console.log('✅ CLIENT DASHBOARD ACTIVADO');
-            
-            // Inicializar dashboard del cliente si existe
-            if (typeof initializeClientDashboard === 'function') {
-                try { initializeClientDashboard(); } catch(initError){ console.error('❌ Error al inicializar dashboard:', initError); }
-            }
-        } else {
-            console.error('❌ clientDashboard no encontrado');
-        }
-    }
-    else {
-        console.warn('Rol no reconocido para redirección:', role);
-        showLoginView();
-    }
-    
-    console.log('🎉 REDIRECCIÓN COMPLETADA');
-
-    // Fallback visual: si después de 300ms ninguna vista (admin/client) está activa, reintentar una vez
-    setTimeout(() => {
-        const anyActive = document.querySelector('#adminDashboard.active, #clientDashboard.active');
-        if (!anyActive) {
-            console.warn('⚠️ Ningún dashboard activo tras login. Aplicando fallback.');
-            if (roleUpper === 'ADMIN') {
-                const adminElement = document.getElementById('adminDashboard');
-                if (adminElement) adminElement.classList.add('active');
-            } else if (roleUpper === 'CLIENT') {
-                const clientElement = document.getElementById('clientDashboard');
-                if (clientElement) clientElement.classList.add('active');
-            }
-        }
-    }, 300);
-}
-
-// View management functions
+// Ya no se maneja vista embebida; index sólo contiene el login
 function showLoginView() {
-    hideAllViews();
-    document.getElementById('loginView').classList.add('active');
-    document.title = 'Pacific Reef Hotel - Login';
-}
-
-function showAdminDashboard() {
-    redirectToDashboard('ADMIN');
-}
-
-function showClientDashboard() {
-    redirectToDashboard('CLIENT');
-}
-
-function hideAllViews() {
-    document.querySelectorAll('.view').forEach(view => {
-        view.classList.remove('active');
-    });
+  document.title = 'Pacific Reef Hotel - Login';
 }
 
 // Notification system
@@ -288,16 +214,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if already logged in
     if (authManager.isLoggedIn()) {
         const userRole = localStorage.getItem('userRole');
-        console.log('👤 Usuario ya autenticado:', userRole);
-        redirectToDashboard(userRole);
+        console.log('👤 Usuario ya autenticado, redirigiendo a página dedicada:', userRole);
+        window.location.href = userRole === 'admin' ? 'admin.html' : 'client.html';
     } else {
         console.log('🔓 Sin sesión activa, mostrando login');
         showLoginView();
     }
 });
 
-// Make functions globally available
-window.showClientDashboard = showClientDashboard;
-window.showAdminDashboard = showAdminDashboard;
-window.hideAllViews = hideAllViews;
+// Exponer sólo handleLogin para el formulario
 window.handleLogin = handleLogin;
