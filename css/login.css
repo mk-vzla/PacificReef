@@ -220,3 +220,77 @@
     text-decoration: underline;
     color: var(--primary-dark);
 }
+
+/* -------------------------------------------------- */
+/* Dark Theme Alignment (Consistent with Dashboard)   */
+/* -------------------------------------------------- */
+/* These overrides reuse the dark palette variables defined in dashboard.css */
+#loginView {
+    background: radial-gradient(circle at 25% 20%, #0f172a 0%, #0b1120 55%, #0b1120 100%);
+}
+
+.login-card {
+    background: var(--dark-surface);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text);
+    box-shadow: 0 12px 28px -8px rgba(0,0,0,.55), 0 4px 10px -4px rgba(0,0,0,.4);
+}
+
+.hotel-logo h1 { color: var(--dark-text); }
+.hotel-logo i { color: #3b82f6; }
+
+.login-form label { color: var(--dark-text-soft); }
+
+.login-form input,
+.login-form select {
+    background: var(--dark-surface-alt);
+    border: 1px solid var(--dark-border);
+    color: var(--dark-text);
+}
+
+.login-form input::placeholder,
+.login-form select::placeholder { color: #64748b; }
+
+.login-form input:focus,
+.login-form select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59,130,246,.35);
+}
+
+.login-btn {
+    background: linear-gradient(135deg,#1d4ed8,#1e3a8a);
+    box-shadow: 0 10px 25px -5px rgba(29,78,216,.45);
+}
+
+.login-btn:hover {
+    box-shadow: 0 14px 32px -6px rgba(29,78,216,.55);
+}
+
+.login-footer {
+    border-top: 1px solid var(--dark-border);
+}
+
+.login-footer p { color: var(--dark-text-soft); }
+.login-footer p:first-child { color: var(--dark-text); }
+
+.login-footer strong { color: #60a5fa; }
+
+/* Feedback States adapted to dark */
+.error-message {
+    background: #431924;
+    color: #fca5a5;
+    border: 1px solid #7f1d1d;
+}
+
+.success-message {
+    background: #052e22;
+    color: #6ee7b7;
+    border: 1px solid #065f46;
+}
+
+.forgot-password a { color: #3b82f6; }
+.forgot-password a:hover { color: #60a5fa; }
+
+@media (max-width: 480px) {
+  #loginView { background: linear-gradient(180deg,#0f172a 0%, #0b1120 70%); }
+}

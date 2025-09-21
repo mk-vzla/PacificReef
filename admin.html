@@ -19,9 +19,8 @@
         <h2>Pacific Reef</h2>
       </div>
       <ul class="sidebar-menu">
-        <li><a href="#" data-section="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#" data-section="reservations" class="active"><i class="fas fa-calendar-check"></i> Reservas</a></li>
         <li><a href="#" data-section="rooms"><i class="fas fa-bed"></i> Habitaciones</a></li>
-        <li><a href="#" data-section="reservations"><i class="fas fa-calendar-check"></i> Reservas</a></li>
         <li><a href="#" data-section="users"><i class="fas fa-users"></i> Usuarios</a></li>
         <li><a href="#" data-section="reports"><i class="fas fa-chart-bar"></i> Reportes</a></li>
       </ul>
@@ -40,21 +39,210 @@
       </header>
       <div class="content-area">
         <!-- Simplificado: solo dashboard principal (puedes copiar el resto si lo necesitas) -->
-        <section id="dashboard" class="content-section active">
-          <div class="stats-grid">
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-bed"></i></div><div class="stat-info"><h3>Habitaciones Totales</h3><p class="stat-number" id="statTotalRooms">0</p></div></div>
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h3>Reservas Activas</h3><p class="stat-number" id="statActiveRes">0</p></div></div>
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-users"></i></div><div class="stat-info"><h3>Huéspedes Totales</h3><p class="stat-number" id="statGuests">0</p></div></div>
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-dollar-sign"></i></div><div class="stat-info"><h3>Ingresos Mensuales</h3><p class="stat-number" id="statRevenue">$0</p></div></div>
-          </div>
-          <div class="dashboard-grid">
-            <div class="card"><h3>Reservas Recientes</h3><div id="recentReservations" class="reservation-list"></div></div>
-            <div class="card"><h3>Disponibilidad Habitaciones</h3><div class="room-status" id="roomStatusSummary"></div></div>
+        <!-- Dashboard eliminado -->
+        <section id="rooms" class="content-section">
+          <div class="rooms-mgmt-wrapper">
+            <div class="rooms-top-bar">
+              <div class="rooms-title-block">
+                <h2>Gestión de Habitaciones</h2>
+                <p>Administra habitaciones, precios y disponibilidad</p>
+              </div>
+              <button class="btn-primary gradient" id="addRoomBtn"><i class="fas fa-plus"></i> Nueva Habitación</button>
+            </div>
+            <div class="rooms-stats-grid" id="roomsStats">
+              <!-- Stats dinámicos -->
+            </div>
+            <div class="rooms-filters-card">
+              <div class="rfc-header"><h3><i class="fas fa-filter"></i> Filtros</h3></div>
+              <div class="rooms-filters-grid">
+                <div class="field search-field">
+                  <i class="fas fa-search"></i>
+                  <input id="roomSearch" type="text" placeholder="Buscar por número o nombre..." />
+                </div>
+                <div class="field">
+                  <select id="roomStatusFilter">
+                    <option value="all">Todos los estados</option>
+                    <option value="available">Disponible</option>
+                    <option value="occupied">Ocupada</option>
+                    <option value="maintenance">Mantenimiento</option>
+                    <option value="cleaning">Limpieza</option>
+                    <option value="out_of_service">Fuera de servicio</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <select id="roomTypeFilter">
+                    <option value="all">Todos los tipos</option>
+                    <option value="standard">Standard</option>
+                    <option value="deluxe">Deluxe</option>
+                    <option value="suite">Suite</option>
+                    <option value="villa">Villa</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <select id="roomFloorFilter">
+                    <option value="all">Todos los pisos</option>
+                    <option value="1">Piso 1</option>
+                    <option value="2">Piso 2</option>
+                    <option value="3">Piso 3</option>
+                    <option value="4">Piso 4</option>
+                    <option value="5">Piso 5</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <button id="roomClearFiltersBtn" class="btn-outline full">Limpiar</button>
+                </div>
+              </div>
+            </div>
+            <div id="roomsCards" class="rooms-advanced-grid"></div>
+            <div id="roomsEmptyState" class="rooms-empty" style="display:none;">
+              <i class="fas fa-bed"></i>
+              <p>No se encontraron habitaciones con los filtros actuales.</p>
+            </div>
           </div>
         </section>
-        <section id="rooms" class="content-section">
-          <div class="section-header"><h2>Gestión de Habitaciones</h2><button class="btn-primary" id="addRoomBtn">Añadir Habitación</button></div>
-          <div class="table-container"><table class="data-table"><thead><tr><th>Nº</th><th>Tipo</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="roomsTableBody"></tbody></table></div>
+        <section id="reservations" class="content-section">
+          <div class="reservations-mgmt-wrapper">
+            <div class="reservations-stats-grid">
+              <div class="res-stat-card">
+                <div class="rsc-info">
+                  <p>Check-ins Hoy</p>
+                  <h4 id="resStatCheckins">0</h4>
+                </div>
+                <div class="rsc-icon"><i class="fas fa-check-circle"></i></div>
+              </div>
+              <div class="res-stat-card">
+                <div class="rsc-info">
+                  <p>Check-outs Hoy</p>
+                  <h4 id="resStatCheckouts">0</h4>
+                </div>
+                <div class="rsc-icon red"><i class="fas fa-circle-xmark"></i></div>
+              </div>
+              <div class="res-stat-card">
+                <div class="rsc-info">
+                  <p>Reservas Activas</p>
+                  <h4 id="resStatActive">0</h4>
+                </div>
+                <div class="rsc-icon purple"><i class="fas fa-calendar-check"></i></div>
+              </div>
+              <div class="res-stat-card">
+                <div class="rsc-info">
+                  <p>Pagos Pendientes</p>
+                  <h4 id="resStatPendingPayments">0</h4>
+                </div>
+                <div class="rsc-icon gold"><i class="fas fa-dollar-sign"></i></div>
+              </div>
+            </div>
+            <div class="reservations-filters-card">
+              <div class="rfc-header"><h3>Filtros</h3></div>
+              <div class="rfc-grid">
+                <div class="field search-field">
+                  <i class="fas fa-search"></i>
+                  <input id="reservationSearchInput" type="text" placeholder="Buscar reservas..." />
+                </div>
+                <div class="field">
+                  <select id="reservationStatusFilter">
+                    <option value="all">Todos los estados</option>
+                    <option value="Confirmada">Confirmada</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="Cancelada">Cancelada</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <select id="reservationPaymentFilter">
+                    <option value="all">Todos los pagos</option>
+                    <option value="Pagado">Pagado</option>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="N/A">N/A</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <button id="reservationClearFiltersBtn" class="btn-outline full">Limpiar</button>
+                </div>
+              </div>
+            </div>
+            <!-- Botones rápidos de filtro -->
+            <div class="reservations-quick-filters">
+              <button id="quickFilterToday" class="qf-btn">Hoy</button>
+              <button id="quickFilterUpcoming" class="qf-btn">Pronto</button>
+              <button id="quickFilterCompleted" class="qf-btn">Completada</button>
+              <button id="quickFilterCanceled" class="qf-btn">Cancelada</button>
+            </div>
+            <div class="reservations-table-wrapper">
+              <table class="reservations-table">
+                <thead>
+                  <tr>
+                    <th>Código</th>
+                    <th>Cliente</th>
+                    <th>Habitación</th>
+                    <th>Check-In</th>
+                    <th>Check-Out</th>
+                    <th>Huéspedes</th>
+                    <th>Total</th>
+                    <th>Estado</th>
+                    <th>Pago</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="reservationsTableBody"></tbody>
+              </table>
+              <div id="reservationsEmptyState" class="reservations-empty" style="display:none;">
+                <i class="fas fa-calendar-times"></i>
+                <p>No se encontraron reservas con los filtros actuales.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section id="users" class="content-section">
+          <div class="section-header"></div>
+          <div class="table-container">
+            <table class="data-table compact-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Email</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+        <section id="reports" class="content-section">
+          <div class="reports-wrapper">
+            <div class="reports-stats-grid" id="reportsStats"></div>
+            <div class="reports-center-card">
+              <div class="reports-center-head">
+                <div class="rch-left">
+                  <h3><i class="fas fa-chart-line"></i> Centro de Reportes</h3>
+                  <p>Genera y descarga reportes empresariales para análisis de negocio</p>
+                </div>
+                <div class="rch-actions">
+                  <select id="reportCategoryFilter" class="report-filter">
+                    <option value="all">Todas las categorías</option>
+                    <option value="ingresos">💰 Ingresos</option>
+                    <option value="ocupacion">🏨 Ocupación</option>
+                    <option value="clientes">👥 Clientes</option>
+                  </select>
+                </div>
+              </div>
+              <div class="reports-grid" id="reportsGrid"></div>
+              <div class="reports-empty" id="reportsEmpty" style="display:none;">
+                <i class="fas fa-file-alt"></i>
+                <p>No hay reportes disponibles para esta categoría</p>
+                <button class="btn-outline" id="showAllReportsBtn">Ver todos los reportes</button>
+              </div>
+            </div>
+            <div class="reports-demo-note">
+              <i class="fas fa-info-circle"></i>
+              <div>
+                <h4>Versión Demo</h4>
+                <p>Esta sección simula la generación de reportes (PDF / Excel). En un entorno real se generarían archivos descargables basados en datos de la base.</p>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>

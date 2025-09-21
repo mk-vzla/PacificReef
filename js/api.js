@@ -28,83 +28,274 @@ class ApiService {
                 email: 'cliente@ejemplo.com',
                 role: 'client',
                 avatar: 'C'
-            }
-        ];
-
-        // Mock room data
-        this.mockRooms = [
-            {
-                id: 1,
-                number: '101',
-                type: 'Standard',
-                status: 'Disponible',
-                price: 80,
-                capacity: 2,
-                amenities: ['WiFi', 'TV', 'Aire Acondicionado']
             },
-            {
-                id: 2,
-                number: '102',
-                type: 'Standard',
-                status: 'Ocupada',
-                price: 80,
-                capacity: 2,
-                amenities: ['WiFi', 'TV', 'Aire Acondicionado']
-            },
+            // Clientes ficticios adicionales
             {
                 id: 3,
-                number: '201',
-                type: 'Deluxe',
-                status: 'Disponible',
-                price: 120,
-                capacity: 4,
-                amenities: ['WiFi', 'TV', 'Aire Acondicionado', 'Minibar', 'Balcón']
+                username: 'maria',
+                password: 'maria123',
+                name: 'María López',
+                email: 'maria.lopez@example.com',
+                role: 'client',
+                avatar: 'M'
             },
             {
                 id: 4,
-                number: '202',
-                type: 'Deluxe',
-                status: 'Mantenimiento',
-                price: 120,
-                capacity: 4,
-                amenities: ['WiFi', 'TV', 'Aire Acondicionado', 'Minibar', 'Balcón']
+                username: 'juan',
+                password: 'juan123',
+                name: 'Juan Pérez',
+                email: 'juan.perez@example.com',
+                role: 'client',
+                avatar: 'J'
             },
             {
                 id: 5,
-                number: '301',
-                type: 'Suite',
-                status: 'Disponible',
-                price: 200,
+                username: 'sofia',
+                password: 'sofia123',
+                name: 'Sofía Herrera',
+                email: 'sofia.herrera@example.com',
+                role: 'client',
+                avatar: 'S'
+            },
+            {
+                id: 6,
+                username: 'carlos',
+                password: 'carlos123',
+                name: 'Carlos Medina',
+                email: 'carlos.medina@example.com',
+                role: 'client',
+                avatar: 'C'
+            },
+            {
+                id: 7,
+                username: 'ana',
+                password: 'ana123',
+                name: 'Ana Torres',
+                email: 'ana.torres@example.com',
+                role: 'client',
+                avatar: 'A'
+            },
+            // Usuarios adicionales solicitados
+            { id: 8, username: 'luis', password: 'luis123', name: 'Luis Cabrera', email: 'luis.cabrera@example.com', role: 'client', avatar:'L' },
+            { id: 9, username: 'valeria', password: 'valeria123', name: 'Valeria Soto', email: 'valeria.soto@example.com', role: 'client', avatar:'V' },
+            { id: 10, username: 'diego', password: 'diego123', name: 'Diego Rivas', email: 'diego.rivas@example.com', role: 'client', avatar:'D' },
+            { id: 11, username: 'andres', password: 'andres123', name: 'Andrés Molina', email: 'andres.molina@example.com', role: 'client', avatar:'A' },
+            { id: 12, username: 'patricia', password: 'patricia123', name: 'Patricia León', email: 'patricia.leon@example.com', role: 'client', avatar:'P' },
+            { id: 13, username: 'ricardo', password: 'ricardo123', name: 'Ricardo Fuentes', email: 'ricardo.fuentes@example.com', role: 'client', avatar:'R' },
+            { id: 14, username: 'fernanda', password: 'fernanda123', name: 'Fernanda Díaz', email: 'fernanda.diaz@example.com', role: 'client', avatar:'F' },
+            { id: 15, username: 'jorge', password: 'jorge123', name: 'Jorge Salinas', email: 'jorge.salinas@example.com', role: 'client', avatar:'J' },
+            { id: 16, username: 'valentin', password: 'valentin123', name: 'Valentín Herrera', email: 'valentin.herrera@example.com', role: 'client', avatar:'V' },
+            { id: 17, username: 'carla', password: 'carla123', name: 'Carla Peña', email: 'carla.pena@example.com', role: 'client', avatar:'C' }
+        ];
+
+        // Mock room data
+        // Extended room mock to support advanced management UI
+        // status mapping legacy -> extended: Disponible->available, Ocupada->occupied, Mantenimiento->maintenance
+        this.mockRooms = [
+            {
+                id: 1,
+                number: '501',
+                name: 'Suite Oceanview Premium',
+                type: 'suite',
+                floor: 5,
+                capacity: 4,
+                basePrice: 450,
+                currentPrice: 450,
+                status: 'available',
+                amenities: ['Vista al mar','Balcón privado','Jacuzzi','WiFi','Minibar'],
+                lastCleaned: '2025-09-19',
+                nextMaintenance: '2025-10-15',
+                reservations: 3
+            },
+            {
+                id: 2,
+                number: '502',
+                name: 'Suite Oceanview Premium',
+                type: 'suite',
+                floor: 5,
+                capacity: 4,
+                basePrice: 450,
+                currentPrice: 450,
+                status: 'occupied',
+                amenities: ['Vista al mar','Balcón privado','Jacuzzi','WiFi','Minibar'],
+                lastCleaned: '2025-09-17',
+                nextMaintenance: '2025-10-15',
+                occupiedUntil: '2025-09-27',
+                reservations: 5
+            },
+            {
+                id: 3,
+                number: '205',
+                name: 'Hab. Deluxe',
+                type: 'deluxe',
+                floor: 2,
+                capacity: 2,
+                basePrice: 280,
+                currentPrice: 315,
+                status: 'maintenance',
+                amenities: ['Vista parcial al mar','Balcón','WiFi','Aire acondicionado'],
+                lastCleaned: '2025-09-18',
+                nextMaintenance: '2025-09-22',
+                reservations: 2
+            },
+            {
+                id: 4,
+                number: '102',
+                name: 'Hab. Standard',
+                type: 'standard',
+                floor: 1,
+                capacity: 2,
+                basePrice: 180,
+                currentPrice: 200,
+                status: 'cleaning',
+                amenities: ['WiFi','Aire acondicionado','TV por cable'],
+                lastCleaned: '2025-09-20',
+                nextMaintenance: '2025-11-01',
+                reservations: 1
+            },
+            {
+                id: 5,
+                number: '302',
+                name: 'Villa Familiar',
+                type: 'villa',
+                floor: 3,
                 capacity: 6,
-                amenities: ['WiFi', 'TV', 'Aire Acondicionado', 'Minibar', 'Balcón', 'Jacuzzi', 'Sala de estar']
+                basePrice: 650,
+                currentPrice: 650,
+                status: 'out_of_service',
+                amenities: ['Vista al mar','Piscina privada','Cocina completa','WiFi','Jardín'],
+                lastCleaned: '2025-09-15',
+                nextMaintenance: '2025-09-25',
+                reservations: 0
             }
         ];
 
         // Mock reservation data
         this.mockReservations = [
+            // Confirmada
             {
                 id: 1,
                 userId: 2,
                 roomId: 2,
                 userName: 'Cliente Demo',
                 roomNumber: '102',
-                checkIn: '2024-03-15',
-                checkOut: '2024-03-18',
-                status: 'Confirmada',
+                checkIn: '2025-09-20',
+                checkOut: '2025-09-22',
+                status: 'Confirmada', // Check-in hoy (1)
                 totalAmount: 240,
                 guests: 2
             },
+            // Pendiente
             {
                 id: 2,
-                userId: 2,
+                userId: 3,
                 roomId: 3,
-                userName: 'Cliente Demo',
+                userName: 'María López',
                 roomNumber: '201',
-                checkIn: '2024-03-20',
-                checkOut: '2024-03-25',
+                checkIn: '2025-09-20',
+                checkOut: '2025-09-21',
                 status: 'Pendiente',
-                totalAmount: 600,
+                totalAmount: 480,
+                guests: 2
+            },
+            // Cancelada
+            {
+                id: 3,
+                userId: 4,
+                roomId: 1,
+                userName: 'Juan Pérez',
+                roomNumber: '101',
+                checkIn: '2025-09-15',
+                checkOut: '2025-09-16',
+                status: 'Cancelada',
+                totalAmount: 160,
+                guests: 1
+            },
+            // Pasadas completadas (2)
+            {
+                id: 4,
+                userId: 8,
+                roomId: 5,
+                userName: 'Luis Cabrera',
+                roomNumber: '301',
+                checkIn: '2025-09-12',
+                checkOut: '2025-09-14',
+                status: 'Completada',
+                totalAmount: 400,
+                guests: 2
+            },
+            {
+                id: 5,
+                userId: 9,
+                roomId: 4,
+                userName: 'Valeria Soto',
+                roomNumber: '202',
+                checkIn: '2025-09-13',
+                checkOut: '2025-09-15',
+                status: 'Completada',
+                totalAmount: 360,
+                guests: 2
+            },
+            // Futuras / semana
+            {
+                id: 6,
+                userId: 10,
+                roomId: 3,
+                userName: 'Diego Rivas',
+                roomNumber: '201',
+                checkIn: '2025-09-21',
+                checkOut: '2025-09-23',
+                status: 'Confirmada',
+                totalAmount: 480,
+                guests: 2
+            },
+            {
+                id: 7,
+                userId: 11,
+                roomId: 5,
+                userName: 'Andrés Molina',
+                roomNumber: '301',
+                checkIn: '2025-09-22',
+                checkOut: '2025-09-24',
+                status: 'Confirmada',
+                totalAmount: 400,
                 guests: 3
+            },
+            {
+                id: 8,
+                userId: 12,
+                roomId: 2,
+                userName: 'Patricia León',
+                roomNumber: '102',
+                checkIn: '2025-09-23',
+                checkOut: '2025-09-25',
+                status: 'Pendiente',
+                totalAmount: 240,
+                guests: 1
+            },
+            {
+                id: 9,
+                userId: 13,
+                roomId: 1,
+                userName: 'Ricardo Fuentes',
+                roomNumber: '101',
+                checkIn: '2025-09-24',
+                checkOut: '2025-09-27',
+                status: 'Confirmada',
+                totalAmount: 320,
+                guests: 2
+            },
+            {
+                id: 10,
+                userId: 14,
+                roomId: 4,
+                userName: 'Fernanda Díaz',
+                roomNumber: '202',
+                checkIn: '2025-09-25',
+                checkOut: '2025-09-28',
+                status: 'Confirmada',
+                totalAmount: 360,
+                guests: 2
             }
         ];
 
