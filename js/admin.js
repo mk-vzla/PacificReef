@@ -450,7 +450,7 @@ class AdminDashboard {
                 <td><span class="tag-payment ${paymentClass}">${payment}</span></td>
                 <td><div class="reservations-actions">
                     <button class="icon-btn edit" title="Editar" onclick="adminDashboard.editReservation(${r.id})"><i class="fas fa-edit"></i></button>
-                    <button class="icon-btn cancel" title="Cancelar" onclick="adminDashboard.cancelReservation(${r.id})"><i class="fas fa-ban"></i></button>
+                    <button class="icon-btn cancel" title="Anular" onclick="adminDashboard.cancelReservation(${r.id})"><i class="fas fa-ban"></i></button>
                 </div></td>
             </tr>`;
         }).join('');
