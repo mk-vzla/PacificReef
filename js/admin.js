@@ -452,6 +452,12 @@ class AdminDashboard {
             const response = await apiService.getUsers(this.filters.users);
             this.data.users = response.data || [];
             this.renderUsersTable();
+            // Listener búsqueda
+            const usInput = document.getElementById('userSearchInput');
+            if (usInput && !usInput._bound) {
+                usInput.addEventListener('input', ()=> this.renderUsersTable());
+                usInput._bound = true;
+            }
         } catch (error) {
             console.error('Error loading users:', error);
             this.renderEmptyState('users', 'No hay usuarios');
@@ -460,32 +466,38 @@ class AdminDashboard {
 
     renderUsersTable() {
         const tbody = document.getElementById('usersTableBody');
+        const empty = document.getElementById('usersEmptyState');
         if (!tbody) return;
-
-        if (this.data.users.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center">No hay usuarios</td></tr>';
-            return;
+        const term = (document.getElementById('userSearchInput')?.value || '').trim().toLowerCase();
+        let list = [...this.data.users];
+        if (term) {
+            list = list.filter(u => (
+                u.id.toString().includes(term) ||
+                (u.name && u.name.toLowerCase().includes(term)) ||
+                (u.email && u.email.toLowerCase().includes(term))
+            ));
         }
+        if (!list.length) {
+            tbody.innerHTML = '';
+            if (empty) empty.style.display='flex';
+            return;
+        } else if (empty) empty.style.display='none';
 
-        tbody.innerHTML = this.data.users.map(user => `
-            <tr>
-                <td>#${user.id}</td>
+        tbody.innerHTML = list.map(user => {
+            const roleClass = (user.role||'').toLowerCase();
+            const statusClass = (user.status||'').toLowerCase();
+            return `<tr>
+                <td><span class="code">#${user.id}</span></td>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
-                <td><span class="tag ${user.role}">${this.capitalizeFirst(user.role)}</span></td>
-                <td><span class="status ${user.status}">${this.capitalizeFirst(user.status)}</span></td>
-                <td>
-                    <div class="action-buttons">
-                        <button class="action-btn edit" onclick="adminDashboard.editUser(${user.id})">
-                            <i class="fas fa-edit"></i> Editar
-                        </button>
-                        <button class="action-btn delete" onclick="adminDashboard.deleteUser(${user.id})">
-                            <i class="fas fa-trash"></i> Eliminar
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
+                <td><span class="tag-status ${roleClass}">${this.capitalizeFirst(user.role)}</span></td>
+                <td><span class="tag-status ${statusClass}">${this.capitalizeFirst(user.status)}</span></td>
+                <td><div class="reservations-actions">
+                    <button class="icon-btn edit" title="Editar" onclick="adminDashboard.editUser(${user.id})"><i class="fas fa-edit"></i></button>
+                    <button class="icon-btn cancel" title="Eliminar" onclick="adminDashboard.deleteUser(${user.id})"><i class="fas fa-trash"></i></button>
+                </div></td>
+            </tr>`;
+        }).join('');
     }
 
     // Modal management

@@ -192,21 +192,35 @@
           </div>
         </section>
         <section id="users" class="content-section">
-          <div class="section-header"></div>
-          <div class="table-container">
-            <table class="data-table compact-table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nombre</th>
-                  <th>Email</th>
-                  <th>Rol</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="usersTableBody"></tbody>
-            </table>
+          <div class="users-mgmt-wrapper">
+            <div class="users-filters-card" style="margin-bottom:18px;">
+              <div class="rfc-header"><h3>Usuarios</h3></div>
+              <div class="rfc-grid">
+                <div class="field search-field" style="flex:1;">
+                  <i class="fas fa-search"></i>
+                  <input id="userSearchInput" type="text" placeholder="Buscar usuario por ID, nombre o email..." />
+                </div>
+              </div>
+            </div>
+            <div class="reservations-table-wrapper">
+              <table class="reservations-table users-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+              </table>
+              <div id="usersEmptyState" class="reservations-empty" style="display:none;">
+                <i class="fas fa-user-slash"></i>
+                <p>No se encontraron usuarios con el criterio actual.</p>
+              </div>
+            </div>
           </div>
         </section>
         <section id="reports" class="content-section">
