@@ -458,7 +458,7 @@ class AdminDashboard {
 
     cancelReservation(id){
         const r = this.data.reservations.find(x=>x.id===id); if(!r) return;
-        if(!confirm('¿Cancelar esta reserva?')) return;
+        if(!confirm('¿Anular esta reserva?')) return;
         // Simulación: marcar anulada
         r.status = 'Anulada';
         showNotification('Reserva anulada', 'success');
