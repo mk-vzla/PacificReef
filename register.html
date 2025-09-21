@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Cuenta - Pacific Reef Hotel</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/login.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    .register-icon {
+      width: 72px; height: 72px; border-radius: 18px;
+      background: linear-gradient(135deg,#059669,#047857);
+      display:flex;align-items:center;justify-content:center;
+      margin:0 auto 24px; font-size:34px; color:#fff;
+      box-shadow:0 12px 28px -8px rgba(4,120,87,.55),0 4px 10px -4px rgba(4,120,87,.4);
+    }
+    .login-card h2 { margin:0 0 4px; font-size:26px; font-weight:600; color:#f1f5f9; }
+    .login-subtitle { color:#cbd5e1; font-size:14px; margin-bottom:28px; }
+    /* Forzado de alto contraste en registro */
+    .login-form label { color:#e2e8f0; font-weight:600; letter-spacing:.3px; }
+    .login-form input { color:#f1f5f9; background:rgba(255,255,255,.05); border:1px solid #1e293b; }
+    .login-form input:focus { border-color:#3b82f6; box-shadow:0 0 0 2px rgba(59,130,246,.35); }
+    .login-form input::placeholder { color:#94a3b8; }
+    .login-card { color:#f1f5f9; }
+    .alt-action span, .alt-action a { color:#e2e8f0; }
+    .alt-action a { color:#60a5fa; }
+    .login-footer p { color:#94a3b8 !important; }
+    .alt-action { margin-top:28px; font-size:14px; }
+    .alt-action a { color:#3b82f6; text-decoration:none; font-weight:600; }
+    .alt-action a:hover { color:#60a5fa; }
+  </style>
+</head>
+<body>
+  <div id="loginView" class="view active">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="register-icon"><i class="fas fa-user-plus"></i></div>
+        <h2>Crear Cuenta</h2>
+        <p class="login-subtitle">Pacific Reef Hotel</p>
+  <form id="registerForm" class="login-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="fullName">Nombre Completo</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Tu nombre completo" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" placeholder="••••••" required />
+          </div>
+          <a href="index.html" class="register-btn" id="registerBtn">Crear Cuenta</a>
+        </form>
+        <div class="alt-action">
+          <span>¿Ya tienes cuenta? <a href="index.html">Inicia Sesión</a></span>
+        </div>
+        <div class="login-footer" style="margin-top:24px;">
+          <p>Demo: Cualquier información funciona</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>// No hay validaciones: el enlace redirige directamente al index.</script>
+</body>
+</html>

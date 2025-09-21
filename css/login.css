@@ -96,6 +96,30 @@
     transform: translateY(0);
 }
 
+/* Register button (secondary action) */
+.register-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin-top: 14px;
+    background: linear-gradient(135deg,#059669,#047857);
+    color: #fff;
+    padding: 14px 16px;
+    border-radius: var(--border-radius);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+    box-shadow: 0 10px 25px -5px rgba(5,150,105,.45);
+}
+
+.register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px -6px rgba(5,150,105,.55);
+}
+
+.register-btn:active { transform: translateY(0); }
+
 .login-footer {
     margin-top: 32px;
     padding-top: 24px;
