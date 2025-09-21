@@ -259,6 +259,8 @@
         </section>
       </div>
     </main>
+    <!-- Botón flotante logout móvil -->
+    <button id="logoutBtnFloating" class="logout-floating"><i class="fas fa-sign-out-alt"></i> Salir</button>
   </div>
 
   <script src="js/api.js"></script>
@@ -276,6 +278,7 @@
         try { initializeAdminDashboard(); } catch(e){ console.error('Init admin error', e); }
       }
       document.getElementById('logoutBtn').addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
+      document.getElementById('logoutBtnFloating')?.addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
     });
   </script>
 </body>

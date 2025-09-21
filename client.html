@@ -196,6 +196,8 @@
         </section>
       </div>
     </main>
+    <!-- Botón flotante logout móvil -->
+    <button id="clientLogoutBtnFloating" class="logout-floating"><i class="fas fa-sign-out-alt"></i> Salir</button>
   </div>
 
   <script src="js/api.js"></script>
@@ -230,6 +232,7 @@
         try { initializeClientDashboard(); } catch(e){ console.error('Init client error', e); }
       }
       document.getElementById('clientLogoutBtn').addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
+      document.getElementById('clientLogoutBtnFloating')?.addEventListener('click', ()=>{ localStorage.clear(); window.location.href='index.html'; });
     });
   </script>
 </body>
