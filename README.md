@@ -1,62 +1,37 @@
-# 🏨 Pacific Reef Hotel Management System
+﻿# 🏨 Pacific Reef – Demo UI
 
-Sistema de gestión hotelera (UI 100% mock) con separación clara de páginas y posibilidad de integrar backend Spring Boot opcional.
+Sitio en vivo: https://mk-vzla.github.io/PacificReef/index.html
 
-## 🚀 Inicio Rápido
+Interfaz demostrativa de gestión hotelera. Todo corre en el navegador con datos mock en memoria (sin backend conectado). Ideal para mostrar flujos básicos: login, panel admin, panel cliente, reservas y exploración de habitaciones.
 
-### Frontend (Mock – Recomendado)
+## Abrir localmente (Live Server)
+Opción rápida recomendada:
+1. Abre la carpeta del proyecto en VS Code.
+2. Instala (si no la tienes) la extensión “Live Server”.
+3. Clic derecho en `index.html` → "Open with Live Server".
+4. El navegador se abre en `http://localhost:5500` (o puerto similar) y listo.
 
-1. Abrir VS Code en la carpeta raíz `PacificReef/`
-2. Extensión sugerida: Live Server
-3. Clic derecho en `index.html` → "Open with Live Server"
-4. Ingresar credenciales de demostración
-5. Serás redirigido a `admin.html` o `client.html` según el rol
+## Uso rápido
+Abrir `index.html` (o usar el enlace live), iniciar sesión con una credencial y navegar. Sin builds, sin dependencias adicionales.
 
-No existen llamadas de red: todos los datos se generan en memoria dentro de `js/api.js`.
+Credenciales de prueba: cliente `client / client123` · admin `admin / admin123`.
 
-### Credenciales de Acceso
+## Qué incluye (breve)
+Login ligero → redirección según rol. Panel admin: usuarios, habitaciones, reservas, estadísticas ficticias. Panel cliente: habitaciones destacadas, reservas personales, perfil ampliado. Códigos de reserva formateados. Tema oscuro único. Todo editable tocando `js/api.js`.
 
-- **Cliente**: `client` / `client123`
-- **Administrador**: `admin` / `admin123`
+## Estructura mínima
+`index.html`, `admin.html`, `client.html`, `register.html`, carpeta `css/` (estilos), carpeta `js/` (auth, api, lógica de paneles), y módulos opcionales (`backend/`, `analytics/`, `database/`). Puede existir `frontend/` si se centraliza una versión reorganizada.
 
-## 📁 Estructura del Proyecto
+## Backend futuro
+Carpeta `backend/` (Spring Boot) lista para convertirse en origen real de datos: solo habría que reemplazar llamadas mock por fetch y mapear respuestas.
 
-```
-PacificReef/
-├── index.html          # Página de login (minimal, solo formulario + link registro)
-├── register.html       # Alta mock (sin lógica de persistencia real)
-├── admin.html          # Dashboard administrador standalone
-├── client.html         # Dashboard cliente standalone
-├── css/                # Estilos globales y componentes
-├── js/
-│   ├── auth.js         # Login + sesión mock (localStorage)
-│   ├── api.js          # Servicio de datos mock (usuarios, habitaciones, reservas)
-│   ├── admin.js        # Lógica del panel admin
-│   └── client.js       # Lógica del panel cliente
-├── backend/            # Backend Spring Boot (opcional, no conectado aún a la UI mock)
-├── analytics/          # Scripts Python de analítica
-└── database/           # SQLite / scripts utilitarios
-```
+## Limitado a propósito
+Sin persistencia real, reportes simulados, validaciones mínimas. Se prioriza claridad visual y flujo.
 
-## ✨ Características
+## Próximo paso sugerido
+Sustituir `api.js` por endpoints REST y añadir autenticación real (JWT / sesiones) manteniendo firmas async.
 
-### Frontend (Mock)
-
-- ✅ Autenticación simulada (localStorage)
-- ✅ Páginas separadas: login / admin / cliente / registro
-- ✅ Gestión mock: habitaciones (cards + filtros avanzados), reservas (códigos PR-YYYY-XXX, filtros, quick filters), usuarios (tabla filtrable)
-- ✅ Reportes mock con tarjetas e indicadores
-- ✅ Perfil cliente extendido (datos personales, notificaciones, seguridad, métodos de pago)
-- ✅ Normalización estados ("Anulada" en lugar de "Cancelada")
-- ✅ Tema oscuro unificado y badges de estado contrastados
-- ✅ Datos mock enriquecidos (amenities, imágenes simuladas, pricing dinámico)
-
-### Backend (Opcional / Aún desacoplado de la UI mock)
-
-- Spring Boot listo para extender (estructura base en `backend/`)
-- Endpoints de autenticación (AuthController) preparados para futura integración JWT
-- Persistencia configurada con H2 en memoria (modo dev)
-- Preparado para migración desde mock a real sustituyendo llamadas de `api.js`
+Listo. Abre el sitio y explora. 🌊
 
 ### Ejecutar Backend (Opcional)
 
