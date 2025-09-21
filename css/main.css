@@ -206,21 +206,26 @@ body {
     text-transform: uppercase;
 }
 
-/* Estados: Verde (completado/confirmado), Amarillo (pendiente), Rojo (cancelado) */
+/* Estados: Verde (completado/confirmado), Amarillo (pendiente), Rojo (anulada) */
+/* Confirmado - verde más intenso */
 .status.confirmed,
 .status.confirmada,
-.status.completed,
-.status.completado,
-.status.CONFIRMADA { background-color:#dcfce7 !important; color:#166534 !important; }
+.status.CONFIRMADA { background-color:#16a34a !important; color:#f0fdf4 !important; }
 
+/* Completado - azul */
+.status.completed,
+.status.completado { background-color:#1d4ed8 !important; color:#dbeafe !important; }
+
+/* Pendiente - ámbar más fuerte */
 .status.pending,
 .status.pendiente,
-.status.PENDIENTE { background-color:#fef3c7 !important; color:#92400e !important; }
+.status.PENDIENTE { background-color:#f59e0b !important; color:#1f2937 !important; }
 
+/* Anulada - rojo más intenso */
 .status.cancelled,
 .status.canceled,
-.status.cancelada,
-.status.CANCELADA { background-color:#fee2e2 !important; color:#991b1b !important; }
+.status.anulada,
+.status.ANULADA { background-color:#dc2626 !important; color:#fef2f2 !important; }
 
 .status.available {
     background-color: #dcfce7;

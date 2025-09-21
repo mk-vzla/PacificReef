@@ -339,7 +339,7 @@ class AdminDashboard {
         this.data.reservations.forEach(r=>{
             if(r.checkIn === today) checkins++;
             if(r.checkOut === today) checkouts++;
-            if(r.status && r.status.toLowerCase() !== 'cancelada') active++;
+            if(r.status && r.status.toLowerCase() !== 'anulada') active++;
             // Simulación de pagos: asumimos Pendiente si status Pendiente
             if(r.status && r.status.toLowerCase()==='pendiente') pendingPayments++;
         });
@@ -352,7 +352,7 @@ class AdminDashboard {
 
     derivePaymentStatus(res){
         if(res.status && res.status.toLowerCase()==='pendiente') return 'Pendiente';
-        if(res.status && res.status.toLowerCase()==='cancelada') return 'N/A';
+        if(res.status && res.status.toLowerCase()==='anulada') return 'N/A';
         return 'Pagado';
     }
 
@@ -369,7 +369,7 @@ class AdminDashboard {
 
         // Orden base por fecha ascendente (checkIn)
         const chronSorted = [...this.data.reservations].sort((a,b)=> new Date(a.checkIn) - new Date(b.checkIn));
-        // Generar map de código cronológico (ignorando completadas/canceladas orden, solo fecha)
+    // Generar map de código cronológico (ignorando completadas/anuladas orden, solo fecha)
         const chronologicalCodes = new Map();
         chronSorted.forEach((r,idx)=>{ chronologicalCodes.set(r.id, 'PR-2025-'+String(idx+1).padStart(3,'0')); });
 
@@ -400,14 +400,14 @@ class AdminDashboard {
                     filtered = filtered.filter(r=> r.status==='Completada');
                     break;
                 case 'canceled':
-                    filtered = filtered.filter(r=> r.status==='Cancelada');
+                    filtered = filtered.filter(r=> r.status==='Anulada');
                     break;
             }
         }
 
-        // Reorden: Activas / próximas primero, luego pasadas (Completada/Cancelada)
+    // Reorden: Activas / próximas primero, luego pasadas (Completada/Anulada)
         const today = new Date().toISOString().split('T')[0];
-        const isPast = (r)=> new Date(r.checkOut) < new Date(today) || ['Completada','Cancelada'].includes(r.status);
+    const isPast = (r)=> new Date(r.checkOut) < new Date(today) || ['Completada','Anulada'].includes(r.status);
         const activeUpcoming = filtered.filter(r=> !isPast(r));
         const past = filtered.filter(r=> isPast(r));
         const finalList = [...activeUpcoming, ...past];
@@ -440,9 +440,9 @@ class AdminDashboard {
     cancelReservation(id){
         const r = this.data.reservations.find(x=>x.id===id); if(!r) return;
         if(!confirm('¿Cancelar esta reserva?')) return;
-        // Simulación: marcar cancelada
-        r.status = 'Cancelada';
-        showNotification('Reserva cancelada', 'success');
+        // Simulación: marcar anulada
+        r.status = 'Anulada';
+        showNotification('Reserva anulada', 'success');
         this.updateReservationStats();
         this.renderReservationsTable();
     }
@@ -673,7 +673,7 @@ class AdminDashboard {
         if (confirm('¿Eliminar esta reserva?')) {
             try {
                 await apiService.cancelReservation(reservationId);
-                showNotification('Reserva eliminada/cancelada', 'success');
+                showNotification('Reserva eliminada/anulada', 'success');
                 await this.loadReservations();
             } catch (e) {
                 console.error('Delete reservation error', e);

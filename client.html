@@ -15,8 +15,7 @@
       <div class="sidebar-header"><i class="fas fa-umbrella-beach"></i><h2>Pacific Reef</h2></div>
       <ul class="sidebar-menu">
         <li><a href="#" data-section="client-dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="#" data-section="my-reservations"><i class="fas fa-calendar-check"></i> Mis Reservas</a></li>
-        <li><a href="#" data-section="payment-history"><i class="fas fa-credit-card"></i> Pagos</a></li>
+  <li><a href="#" data-section="my-reservations"><i class="fas fa-calendar-check"></i> Mis Reservas</a></li>
         <li><a href="#" data-section="profile"><i class="fas fa-user"></i> Perfil</a></li>
       </ul>
       <div class="sidebar-footer">
@@ -30,10 +29,28 @@
       </header>
       <div class="content-area">
         <section id="client-dashboard" class="content-section active">
-          <div class="stats-grid">
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-calendar-check"></i></div><div class="stat-info"><h3>Reservas Activas</h3><p class="stat-number" id="activeReservationsCount">0</p></div></div>
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-suitcase"></i></div><div class="stat-info"><h3>Estancias Totales</h3><p class="stat-number" id="totalStaysCount">0</p></div></div>
-            <div class="stat-card"><div class="stat-icon"><i class="fas fa-star"></i></div><div class="stat-info"><h3>Puntos</h3><p class="stat-number" id="loyaltyPointsCount">0</p></div></div>
+          <div class="stats-grid" id="clientPrimaryActions">
+            <div class="stat-card action-card" data-target="client-dashboard">
+              <div class="stat-icon"><i class="fas fa-search"></i></div>
+              <div class="stat-info">
+                <h3>Buscar Habitaciones</h3>
+                <p class="stat-number" style="font-size:20px;">5</p>
+              </div>
+            </div>
+            <div class="stat-card action-card" data-target="my-reservations">
+              <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+              <div class="stat-info">
+                <h3>Mis Reservas</h3>
+                <p class="stat-number" id="activeReservationsCount" style="font-size:20px;">0</p>
+              </div>
+            </div>
+            <div class="stat-card action-card" data-target="profile">
+              <div class="stat-icon"><i class="fas fa-user"></i></div>
+              <div class="stat-info">
+                <h3>Mi Perfil</h3>
+                <p class="stat-number" id="profileCompletion" style="font-size:20px;">100%</p>
+              </div>
+            </div>
           </div>
           <div class="integrated-search">
             <h2 style="margin-top:8px; color:#f1f5f9; font-size:20px;">Buscar Habitaciones</h2>
@@ -63,44 +80,120 @@
           </div>
         </section>
         <section id="my-reservations" class="content-section">
-          <h2>Mis Reservas</h2>
+          <h2 style="margin-bottom:12px;">Mis Reservas</h2>
+          <div id="clientReservationFilters" class="quick-filters client-filters" style="margin-bottom:16px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="qf-btn active" data-filter="pending">Pendiente</button>
+            <button class="qf-btn" data-filter="confirmed">Confirmada</button>
+            <button class="qf-btn" data-filter="completed">Completada</button>
+            <button class="qf-btn" data-filter="anulada">Anulada</button>
+            <button class="qf-btn" data-filter="all">Todas</button>
+          </div>
           <div id="clientReservationsList" class="payments-list"></div>
         </section>
-        <section id="payment-history" class="content-section">
-          <h2>Pagos</h2>
-          <div id="paymentCardsContainer" class="payments-list"></div>
-        </section>
         <section id="profile" class="content-section">
-          <h2>Perfil</h2>
-          <form id="profileForm" class="profile-form">
-            <div class="form-row" style="flex-wrap:wrap; gap:16px;">
-              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
-                <label for="firstName" style="font-size:12px;font-weight:600;">Nombre</label>
-                <input id="firstName" name="firstName" placeholder="Nombre">
-              </div>
-              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
-                <label for="lastName" style="font-size:12px;font-weight:600;">Apellido</label>
-                <input id="lastName" name="lastName" placeholder="Apellido">
+          <h2 style="margin-bottom:18px;">Mi Perfil</h2>
+          <div class="profile-cards-stack">
+            <!-- Card: Datos Personales -->
+            <div class="profile-card" id="cardPersonal">
+              <div class="pc-header"><h3>Personal</h3><span class="pc-badge" id="personalStatusBadge">Completo</span></div>
+              <form id="profileForm" class="pc-form">
+                <div class="pc-grid">
+                  <div class="pc-field">
+                    <label for="firstName">Nombre</label>
+                    <input id="firstName" name="firstName" placeholder="Nombre">
+                  </div>
+                  <div class="pc-field">
+                    <label for="lastName">Apellido</label>
+                    <input id="lastName" name="lastName" placeholder="Apellido">
+                  </div>
+                  <div class="pc-field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" placeholder="correo@ejemplo.com">
+                  </div>
+                  <div class="pc-field">
+                    <label for="phone">Teléfono</label>
+                    <input id="phone" name="phone" placeholder="+56 9 ...">
+                  </div>
+                  <div class="pc-field">
+                    <label for="birthDate">Fecha Nacimiento</label>
+                    <input id="birthDate" name="birthDate" type="date">
+                  </div>
+                  <div class="pc-field">
+                    <label for="city">Ciudad</label>
+                    <input id="city" name="city" placeholder="Ciudad">
+                  </div>
+                  <div class="pc-field">
+                    <label for="country">País</label>
+                    <input id="country" name="country" placeholder="País">
+                  </div>
+                  <div class="pc-field pc-full">
+                    <label for="address">Dirección</label>
+                    <textarea id="address" name="address" rows="2" placeholder="Dirección completa"></textarea>
+                  </div>
+                </div>
+                <div class="pc-actions">
+                  <button class="btn-primary" type="submit"><i class="fas fa-save"></i> Guardar Cambios</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Card: Notificaciones -->
+            <div class="profile-card" id="cardNotificaciones">
+              <div class="pc-header"><h3>Notificaciones</h3><span class="pc-badge neutral" id="notifBadge">Configurado</span></div>
+              <div class="pc-section">
+                <div class="toggle-row">
+                  <div class="tr-text">
+                    <strong>Confirmaciones por Email</strong>
+                    <p>Recibir correos cuando una reserva se confirme o sea anulada.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="notifEmailToggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
               </div>
             </div>
-            <div class="form-row" style="flex-wrap:wrap; gap:16px; margin-top:12px;">
-              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
-                <label for="email" style="font-size:12px;font-weight:600;">Email</label>
-                <input id="email" name="email" placeholder="Email">
+
+            <!-- Card: Seguridad -->
+            <div class="profile-card" id="cardSeguridad">
+              <div class="pc-header"><h3>Seguridad</h3><span class="pc-badge warning" id="securityBadge">Revisar</span></div>
+              <div class="pc-section security-actions">
+                <button type="button" id="changePasswordBtn" class="btn-secondary-outline"><i class="fas fa-key"></i> Cambiar Contraseña</button>
+                <div class="toggle-row" style="margin-top:18px;">
+                  <div class="tr-text">
+                    <strong>Autenticación en 2 Pasos (2FA)</strong>
+                    <p>Añade una capa extra solicitando un código temporal.</p>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="twoFactorToggle">
+                    <span class="slider"></span>
+                  </label>
+                </div>
               </div>
-              <div style="flex:1; min-width:200px; display:flex; flex-direction:column;">
-                <label for="phone" style="font-size:12px;font-weight:600;">Teléfono</label>
-                <input id="phone" name="phone" placeholder="Teléfono">
+            </div>
+
+            <!-- Card: Métodos de Pago -->
+            <div class="profile-card" id="cardPagos">
+              <div class="pc-header"><h3>Métodos de Pago</h3><span class="pc-badge" id="paymentsBadge">1 Activo</span></div>
+              <div class="pc-section">
+                <div class="saved-card visa">
+                  <div class="card-left">
+                    <div class="card-brand">VISA</div>
+                    <div class="card-digits">**** **** **** 4242</div>
+                    <div class="card-meta">Expira 12/28 · Preferida</div>
+                  </div>
+                  <div class="card-actions">
+                    <button type="button" class="btn-mini-outline" disabled><i class="fas fa-star"></i></button>
+                    <button type="button" class="btn-mini-outline" title="Editar" disabled><i class="fas fa-edit"></i></button>
+                  </div>
+                </div>
+                <div style="margin-top:14px;">
+                  <button type="button" id="addCardBtn" class="btn-secondary" disabled><i class="fas fa-plus"></i> Añadir Tarjeta</button>
+                  <p style="font-size:11px; color:#64748b; margin-top:8px;">(Demo) Gestión de tarjetas próximamente.</p>
+                </div>
               </div>
             </div>
-            <div style="display:flex; flex-direction:column; margin-top:12px;">
-              <label for="address" style="font-size:12px;font-weight:600;">Dirección</label>
-              <textarea id="address" name="address" placeholder="Dirección" rows="3"></textarea>
-            </div>
-            <div style="margin-top:16px;">
-              <button class="btn-primary" type="submit">Guardar</button>
-            </div>
-          </form>
+          </div>
         </section>
       </div>
     </main>
@@ -113,6 +206,23 @@
     localStorage.setItem('isLoggedIn','true');
     localStorage.setItem('userRole','client');
     localStorage.setItem('user', JSON.stringify(clientAutoUser));
+    // Prefill perfil extendido demo si no existe o forzar actualización
+    (function(){
+      const demoProfile = {
+        phone: '+56 9 1234 5678',
+        address: 'Av. Costera 1234, Departamento 502, Edificio Coral',
+        birthDate: '1992-07-15',
+        city: 'Valparaíso',
+        country: 'Chile',
+        notifEmail: true,
+        twoFactor: true
+      };
+      try {
+        const existing = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+        const merged = { ...demoProfile, ...existing }; // demo por defecto, respeta cambios manuales posteriores
+        localStorage.setItem('profileExtended', JSON.stringify(merged));
+      } catch { localStorage.setItem('profileExtended', JSON.stringify(demoProfile)); }
+    })();
   </script>
   <script src="js/client.js"></script>
   <script>

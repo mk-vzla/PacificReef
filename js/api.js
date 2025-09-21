@@ -198,7 +198,7 @@ class ApiService {
                 totalAmount: 480,
                 guests: 2
             },
-            // Cancelada
+            // Anulada
             {
                 id: 3,
                 userId: 4,
@@ -207,7 +207,7 @@ class ApiService {
                 roomNumber: '101',
                 checkIn: '2025-09-15',
                 checkOut: '2025-09-16',
-                status: 'Cancelada',
+                status: 'Anulada',
                 totalAmount: 160,
                 guests: 1
             },
@@ -295,6 +295,82 @@ class ApiService {
                 checkOut: '2025-09-28',
                 status: 'Confirmada',
                 totalAmount: 360,
+                guests: 2
+            }
+            ,
+            // ---- Reservas adicionales Cliente Demo ----
+            {
+                id: 11,
+                userId: 2,
+                roomId: 1,
+                userName: 'Cliente Demo',
+                roomNumber: '101',
+                checkIn: '2025-09-05',
+                checkOut: '2025-09-07',
+                status: 'Completada',
+                totalAmount: 320,
+                guests: 2
+            },
+            {
+                id: 12,
+                userId: 2,
+                roomId: 3,
+                userName: 'Cliente Demo',
+                roomNumber: '201',
+                checkIn: '2025-09-10',
+                checkOut: '2025-09-12',
+                status: 'Completada',
+                totalAmount: 480,
+                guests: 2
+            },
+            {
+                id: 13,
+                userId: 2,
+                roomId: 4,
+                userName: 'Cliente Demo',
+                roomNumber: '202',
+                checkIn: '2025-09-18',
+                checkOut: '2025-09-19',
+                status: 'Anulada',
+                totalAmount: 360,
+                guests: 1
+            },
+            {
+                id: 14,
+                userId: 2,
+                roomId: 5,
+                userName: 'Cliente Demo',
+                roomNumber: '301',
+                checkIn: '2025-09-23',
+                checkOut: '2025-09-25',
+                status: 'Pendiente',
+                totalAmount: 400,
+                guests: 3
+            },
+            {
+                id: 15,
+                userId: 2,
+                roomId: 2,
+                userName: 'Cliente Demo',
+                roomNumber: '102',
+                checkIn: '2025-09-26',
+                checkOut: '2025-09-28',
+                status: 'Confirmada',
+                totalAmount: 240,
+                guests: 2
+            }
+            ,
+            // Nueva reserva pendiente SIN pago completado (simulación de pago pendiente)
+            {
+                id: 16,
+                userId: 2,
+                roomId: 1,
+                userName: 'Cliente Demo',
+                roomNumber: '101',
+                checkIn: '2025-09-29',
+                checkOut: '2025-10-01',
+                status: 'Pendiente',
+                totalAmount: 320,
                 guests: 2
             }
         ];
@@ -512,7 +588,7 @@ class ApiService {
         const reservationIndex = this.mockReservations.findIndex(r => r.id === reservationId);
         if (reservationIndex !== -1) {
             const reservation = this.mockReservations[reservationIndex];
-            reservation.status = 'Cancelada';
+            reservation.status = 'Anulada';
             
             // Update room status back to available
             const roomIndex = this.mockRooms.findIndex(r => r.id === reservation.roomId);

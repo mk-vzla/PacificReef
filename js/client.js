@@ -13,10 +13,61 @@ class ClientDashboard {
         this.currentSection = 'client-dashboard';
         this.data = {
             reservations: [],
-            availableRooms: [],
-            paymentHistory: []
+            availableRooms: []
         };
         this.searchParams = {};
+    this.reservationsFilter = 'pending';
+        // Dataset fijo para precarga inmediata
+        this.initialMockRooms = [
+            {
+                id: '1',
+                name: 'Suite Premium',
+                type: 'suite',
+                price: 450,
+                capacity: 4,
+                rating: 4.9,
+                available: true,
+                image: 'https://images.unsplash.com/photo-1590490359854-dfba19688d70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMHN1aXRlJTIwYmVkcm9vbXxlbnwxfHx8fDE3NTgyNjgwMDF8MA&ixlib=rb-4.1.0&q=80&w=1080',
+                amenities: ['WiFi', 'Estacionamiento', 'Aire Acondicionado', 'Bañera Jacuzzi', 'Vista al Mar'],
+                description: 'Elegante suite con vista panorámica al océano y amenidades de lujo'
+            },
+            {
+                id: '2',
+                name: 'Habitación Deluxe',
+                type: 'deluxe',
+                price: 280,
+                capacity: 2,
+                rating: 4.6,
+                available: true,
+                image: 'https://images.unsplash.com/photo-1509647924673-bbb53e22eeb8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBob3RlbCUyMHJvb20lMjBkZWx1eGV8ZW58MXx8fHwxNzU4MzQyNjAwfDA&ixlib=rb-4.1.0&q=80&w=1080',
+                amenities: ['WiFi', 'Estacionamiento', 'Aire Acondicionado', 'Minibar'],
+                description: 'Habitación moderna y confortable con todas las comodidades'
+            },
+            {
+                id: '3',
+                name: 'Habitación Standard',
+                type: 'standard',
+                price: 180,
+                capacity: 2,
+                rating: 4.3,
+                available: false,
+                image: 'https://images.unsplash.com/photo-1648766378129-11c3d8d0da05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHN0YW5kYXJkJTIwcm9vbSUyMGJlZHxlbnwxfHx8fDE3NTgzNDI2MDR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+                amenities: ['WiFi', 'Aire Acondicionado', 'TV Cable'],
+                description: 'Habitación cómoda con las amenidades esenciales para una estadía placentera'
+            },
+            {
+                id: '4',
+                name: 'Villa Familiar',
+                type: 'villa',
+                price: 650,
+                capacity: 6,
+                rating: 4.8,
+                available: true,
+                image: 'https://images.unsplash.com/photo-1757839609911-d15795147a40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWFjaCUyMHZpbGxhJTIwZmFtaWx5JTIwcmVzb3J0fGVufDF8fHx8MTc1ODM0MjYwN3ww&ixlib=rb-4.1.0&q=80&w=1080',
+                amenities: ['WiFi', 'Estacionamiento', 'Piscina Privada', 'Cocina Completa', 'Acceso a Playa'],
+                description: 'Villa exclusiva con acceso directo a la playa y todas las comodidades familiares'
+            }
+        ];
     }
 
     async init() {
@@ -28,7 +79,11 @@ class ClientDashboard {
         this.setupSearchForm();
         this.setupProfileForm();
         this.setupQuickActions();
+    this.setupReservationFilters();
         await this.loadDashboardData();
+        // Precarga: usar solo mock local para las destacadas y NO poblar listado general
+        this.data.availableRooms = this.initialMockRooms.slice();
+        this.renderFeaturedRooms(true); // modo inicial
         this.showSection('client-dashboard');
     }
 
@@ -76,7 +131,6 @@ class ClientDashboard {
         const titles = {
             'client-dashboard': 'Dashboard',
             'my-reservations': 'Mis Reservas',
-            'payment-history': 'Historial de Pagos',
             'profile': 'Mi Perfil'
         };
         return titles[sectionName] || 'Dashboard';
@@ -99,6 +153,21 @@ class ClientDashboard {
             
             // Update dashboard statistics
             this.updateDashboardStats();
+            // Listeners para tarjetas de acción
+            const actionCards = document.querySelectorAll('#clientPrimaryActions .action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const target = card.getAttribute('data-target');
+                    if (target === 'client-dashboard') return; // ya está
+                    this.showSection(target);
+                    // marcar menú lateral
+                    const link = document.querySelector(`#clientDashboard .sidebar-menu a[data-section='${target}']`);
+                    if (link) {
+                        document.querySelectorAll('#clientDashboard .sidebar-menu a').forEach(l=>l.classList.remove('active'));
+                        link.classList.add('active');
+                    }
+                });
+            });
             
             console.log('Dashboard cargado exitosamente');
             
@@ -110,19 +179,11 @@ class ClientDashboard {
     }
 
     updateDashboardStats() {
-        // Calculate stats from current reservations data
         const activeReservations = this.data.reservations.filter(r => r.status === 'confirmed').length;
-        const totalStays = this.data.reservations.length + 5; // Add historical stays
-        const loyaltyPoints = totalStays * 150 + activeReservations * 200; // Mock calculation
-        
-        // Update DOM elements
         const activeCountEl = document.getElementById('activeReservationsCount');
-        const totalStaysEl = document.getElementById('totalStaysCount');
-        const loyaltyPointsEl = document.getElementById('loyaltyPointsCount');
-        
         if (activeCountEl) activeCountEl.textContent = activeReservations;
-        if (totalStaysEl) totalStaysEl.textContent = totalStays;
-        if (loyaltyPointsEl) loyaltyPointsEl.textContent = loyaltyPoints.toLocaleString();
+        const profileCompletion = document.getElementById('profileCompletion');
+        if (profileCompletion) profileCompletion.textContent = '100%';
     }
 
     loadFallbackStats() {
@@ -141,9 +202,6 @@ class ClientDashboard {
             switch (sectionName) {
                 case 'my-reservations':
                     await this.loadMyReservations();
-                    break;
-                case 'payment-history':
-                    await this.loadPaymentHistory();
                     break;
                 case 'profile':
                     this.loadProfileData();
@@ -223,7 +281,7 @@ class ClientDashboard {
         }
     }
 
-    renderAvailableRooms() {
+    renderAvailableRooms(isPreload=false) {
         const roomsGrid = document.getElementById('roomsGrid');
         if (!roomsGrid) return;
 
@@ -238,65 +296,68 @@ class ClientDashboard {
             return;
         }
 
-        roomsGrid.innerHTML = this.data.availableRooms.map(room => {
-            const rating = (room.rating || 4 + Math.random()).toFixed(1);
-            return `
-            <div class="room-card enriched">
-                <div class="room-media">
-                    <div class="image" style="background-image:url('https://source.unsplash.com/600x40${Math.floor(Math.random()*9)}/?hotel,room');"></div>
-                    <div class="badge type">${room.type}</div>
-                    <div class="badge price">$${room.price}</div>
-                </div>
-                <div class="room-body">
-                    <div class="room-header">
-                        <h3>Habitación ${room.number}</h3>
-                        <div class="rating"><i class="fas fa-star"></i> ${rating}</div>
-                    </div>
-                    <p class="room-description">${room.description || 'Agradable habitación con todas las comodidades esenciales.'}</p>
-                    <div class="room-meta">
-                        <span><i class="fas fa-users"></i> Hasta ${room.capacity} huéspedes</span>
-                        <span><i class="fas fa-door-open"></i> ${room.type}</span>
-                    </div>
-                    ${room.amenities ? `<ul class="amenities">${room.amenities.slice(0,4).map(a=>`<li><i class='fas fa-check'></i> ${a}</li>`).join('')} ${room.amenities.length>4?'<li>+ más</li>':''}</ul>`:''}
-                    <div class="room-actions">
-                        <button class="btn-primary" onclick="clientDashboard.bookRoom(${room.id})">Reservar Ahora</button>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
+                // En modo inicial no mostrar grid (solo suites destacadas). Mostrar grid solo tras una búsqueda real.
+                if (isPreload) { roomsGrid.innerHTML=''; return; }
+                roomsGrid.innerHTML = this.data.availableRooms.map(room => {
+                        const rating = (room.rating || (4 + Math.random()/2)).toFixed(1);
+                        const available = room.status ? /available|disponible|true/i.test(room.status.toString()) : room.available !== false;
+                        const displayName = room.name || `${this.capitalizeFirst(room.type)}${room.number? ' '+room.number:''}`;
+                        const capacity = room.capacity || 2;
+                        const amenities = room.amenities || [];
+                        return `
+                        <div class="room-card enriched ${!available? 'not-available':''}">
+                            <div class="room-media">
+                                <div class="image" style="background-image:url('https://source.unsplash.com/600x40${Math.floor(Math.random()*9)}/?hotel,room,luxury');"></div>
+                                ${!available? '<div class="overlay-unavailable">No Disponible</div>':''}
+                            </div>
+                            <div class="room-body">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+                                    <div style="flex:1;">
+                                        <h3>${displayName}</h3>
+                                        <p class="room-description">${room.description || 'Habitación cómoda con las amenidades esenciales para una estadía placentera'}</p>
+                                        <div class="fr-top-meta"><span class="badge">${room.type}</span><div class="rating"><i class="fas fa-star"></i> ${rating}</div></div>
+                                        <div class="fr-meta-line"><i class="fas fa-users"></i> Hasta ${capacity} huéspedes</div>
+                                        ${amenities.length? `<div class="amenities-wrap">${amenities.map(a=>`<span><i class='fas fa-check'></i>${a}</span>`).join('')}</div>`:''}
+                                    </div>
+                                    <div class="price-col"><span class="amount">$${room.price}</span><span>por noche</span></div>
+                                </div>
+                                <div class="actions"><button class="btn-primary" ${!available? 'disabled':''} onclick="clientDashboard.bookRoom(${room.id})">${available? 'Reservar Ahora':'No Disponible'}</button></div>
+                            </div>
+                        </div>`;
+                }).join('');
         this.renderFeaturedSuites();
     }
 
-    renderFeaturedRooms() {
-        const container = document.getElementById('featuredRooms');
-        if (!container) return;
-        // Seleccionar 4 habitaciones variadas (no suites; suites van en otra sección)
-        let base = this.data.availableRooms.filter(r => !/suite/i.test(r.type));
-        if (base.length < 4) base = this.data.availableRooms.slice();
-        base = base.slice(0,4);
-        if (base.length === 0) { container.innerHTML=''; return; }
-        container.innerHTML = base.map(room => {
-            const rating = (room.rating || (4 + Math.random()/2)).toFixed(1);
-            const amenities = room.amenities ? room.amenities.slice(0,5) : ['WiFi','Aire Acondicionado','TV','Vista','Servicio'];
-            return `
-            <div class="featured-room-card">
-              <div class="fr-media" style="background-image:url('https://source.unsplash.com/800x45${Math.floor(Math.random()*9)}/?hotel,interior,room');"></div>
-              <div class="fr-body">
-                <div style="display:flex; align-items:flex-start; gap:12px;">
-                  <div style="flex:1;">
-                    <h3>${room.type} ${room.number ? '• '+room.number : ''}</h3>
-                    <p class="desc">${room.description || 'Elegante habitación con amenidades de lujo y confort.'}</p>
-                    <div class="fr-top-meta"><span class="badge">${room.type}</span><div class="rating"><i class="fas fa-star"></i> ${rating}</div></div>
-                    <div class="fr-meta-line"><i class="fas fa-users"></i> Hasta ${room.capacity || 2} huéspedes</div>
-                    <div class="amenities-wrap">${amenities.map(a=>`<span><i class='fas fa-check'></i>${a}</span>`).join('')}</div>
-                  </div>
-                  <div class="price-col"><span class="amount">$${room.price}</span><span>por noche</span></div>
-                </div>
-                <div class="actions"><button class="btn-primary" onclick="clientDashboard.bookRoom(${room.id})">Reservar Ahora</button></div>
-              </div>
-            </div>`;
-        }).join('');
-    }
+        renderFeaturedRooms(initial=false) {
+                const container = document.getElementById('featuredRooms');
+                if (!container) return;
+                const base = this.initialMockRooms.slice(0,4);
+                container.innerHTML = base.map(room => {
+                        const rating = room.rating.toFixed ? room.rating.toFixed(1) : room.rating;
+                        return `
+                        <div class="featured-room-card">
+                            <div class="fr-media" style="background-image:url('${room.image}');"></div>
+                            <div class="fr-body">
+                                <div style="display:flex; align-items:flex-start; gap:12px;">
+                                    <div style="flex:1;">
+                                        <h3>${room.name}</h3>
+                                        <p class="desc">${room.description}</p>
+                                        <div class="fr-top-meta"><span class="badge">${room.type}</span><div class="rating"><i class="fas fa-star"></i> ${rating}</div></div>
+                                        <div class="fr-meta-line"><i class="fas fa-users"></i> Hasta ${room.capacity} huéspedes</div>
+                                        <div class="amenities-wrap">${room.amenities.map(a=>`<span><i class='fas fa-check'></i>${a}</span>`).join('')}</div>
+                                    </div>
+                                    <div class="price-col"><span class="amount">$${room.price}</span><span>por noche</span></div>
+                                </div>
+                                <div class="actions"><button class="btn-primary" ${room.available? '' : 'disabled'} onclick="clientDashboard.bookRoom('${room.id}')">${room.available? 'Reservar Ahora':'No Disponible'}</button></div>
+                            </div>
+                        </div>`;
+                }).join('');
+                if (initial) {
+                        // Limpiar suites secundarias para evitar duplicado
+                        const suites = document.getElementById('featuredSuites');
+                        if (suites) suites.innerHTML='';
+                }
+        }
 
     async bookRoom(roomId) {
         const room = this.data.availableRooms.find(r => r.id === roomId);
@@ -341,8 +402,27 @@ Total: $${totalAmount}
     async loadMyReservations() {
         try {
             // Always use mock data - no backend calls
-            const response = await apiService.getMyReservations();
-            this.data.reservations = response.data || [];
+            // Obtener todas las reservas (sin filtrar) para replicar numeración global usada en admin
+            const response = await apiService.getReservations();
+            const currentUser = authManager.getCurrentUser();
+            const all = response.data || [];
+            // Orden global cronológico por checkIn ascendente (igual que admin antes de generar códigos)
+            const chronSorted = [...all].sort((a,b)=> new Date(a.checkIn) - new Date(b.checkIn));
+            const year = new Date().getFullYear();
+            const codeMap = new Map();
+            chronSorted.forEach((r,idx)=>{
+                codeMap.set(r.id, `PR-${year}-${String(idx+1).padStart(3,'0')}`);
+            });
+            // Filtrar sólo reservas del usuario actual
+            const mine = chronSorted.filter(r => currentUser && ((r.userName && r.userName.toLowerCase().includes(currentUser.name.toLowerCase().split(' ')[0])) || r.userId === currentUser.id));
+            // Mapear agregando código existente del map y normalizando estado
+            const withCodes = mine.map(r => ({
+                ...r,
+                prCode: codeMap.get(r.id),
+                status: this.normalizeStatus(r.status)
+            }));
+            // Mostrar en orden descendente por código (más reciente primero)
+            this.data.reservations = withCodes.sort((a,b)=> b.prCode.localeCompare(a.prCode));
             this.renderMyReservations();
             console.log('Reservas cargadas exitosamente:', this.data.reservations.length);
         } catch (error) {
@@ -383,10 +463,22 @@ Total: $${totalAmount}
             return;
         }
 
-        reservationsList.innerHTML = this.data.reservations.map(reservation => `
+        let list = [...this.data.reservations];
+        if (this.reservationsFilter && this.reservationsFilter !== 'all') {
+            list = list.filter(r => r.status === this.reservationsFilter);
+        }
+        if (list.length === 0) {
+            reservationsList.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-check"></i><h3>No hay reservas ${this.reservationsFilter==='all'?'registradas':('en estado '+this.getStatusLabel(this.reservationsFilter))}</h3><p>Cambia el filtro para ver otras reservas.</p></div>`;
+            return;
+        }
+        reservationsList.innerHTML = list.map(reservation => {
+            // Simulación: si estado es Pendiente o Confirmada definimos pago pendiente/completado
+            const paymentStatus = /(pendiente|pending)/i.test(reservation.status) ? 'pending' : 'completed';
+            const paymentLabel = paymentStatus === 'pending' ? 'Pago Pendiente' : 'Pago Completado';
+            return `
             <div class="reservation-card">
                 <div class="reservation-header">
-                    <div class="reservation-id">Reserva #${reservation.id}</div>
+                    <div class="reservation-id">${reservation.prCode || ('Reserva #'+reservation.id)}</div>
                     <span class="status ${reservation.status} ${this.getStatusLabel(reservation.status)} ${this.getStatusLabel(reservation.status).toUpperCase()}">${this.getStatusLabel(reservation.status)}</span>
                 </div>
                 <div class="reservation-details">
@@ -406,19 +498,22 @@ Total: $${totalAmount}
                         <div class="detail-label">Monto Total</div>
                         <div class="detail-value">$${reservation.totalAmount}</div>
                     </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Pago</div>
+                        <div class="detail-value ${paymentStatus}">${paymentLabel}</div>
+                    </div>
                 </div>
                 <div class="reservation-actions">
-                    ${reservation.status === 'confirmed' ? `
-                        <button class="btn-secondary" onclick="clientDashboard.cancelReservation(${reservation.id})">
-                            Cancelar
-                        </button>
-                    ` : ''}
-                    <button class="btn-primary" onclick="clientDashboard.viewReservationDetails(${reservation.id})">
-                        Ver Detalles
-                    </button>
+                    ${paymentStatus === 'pending' ? `
+                        <button class="btn-pay" onclick="clientDashboard.simulatePay(${reservation.id})">Pagar</button>
+                        <button class="btn-annul" onclick="clientDashboard.cancelReservation(${reservation.id})">Anular</button>
+                    ` : (reservation.status === 'confirmed' ? `
+                        <button class="btn-annul" onclick="clientDashboard.cancelReservation(${reservation.id})">Anular</button>
+                    ` : '')}
+                    <button class="btn-primary" onclick="clientDashboard.viewReservationDetails(${reservation.id})">Ver Detalles</button>
                 </div>
             </div>
-        `).join('');
+        `; }).join('');
     }
 
     renderEmptyReservations() {
@@ -437,78 +532,6 @@ Total: $${totalAmount}
         }
     }
 
-    async loadPaymentHistory() {
-        try {
-            const response = await apiService.getPaymentHistory();
-            this.data.paymentHistory = response.data || [];
-            this.renderPaymentHistory();
-        } catch (error) {
-            console.error('Error loading payment history:', error);
-            this.renderEmptyPaymentHistory();
-        }
-    }
-
-    renderPaymentHistory() {
-        const container = document.getElementById('paymentCardsContainer');
-        if (!container) return;
-
-        if (this.data.paymentHistory.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-credit-card"></i>
-                    <h3>No hay historial de pagos</h3>
-                    <p>Aquí verás los pagos de tus reservas cuando existan.</p>
-                </div>
-            `;
-            return;
-        }
-
-        container.innerHTML = this.data.paymentHistory.map(payment => `
-            <div class="payment-card">
-                <div class="payment-header">
-                    <div class="payment-id">Pago #${payment.id}</div>
-                    <span class="status ${payment.status} ${this.getStatusLabel(payment.status)} ${this.getStatusLabel(payment.status).toUpperCase()}">${this.getStatusLabel(payment.status)}</span>
-                </div>
-                <div class="payment-details">
-                    <div class="detail-item">
-                        <div class="detail-label">Fecha</div>
-                        <div class="detail-value">${this.formatDate(payment.date)}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Reserva</div>
-                        <div class="detail-value">#${payment.reservationId}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Monto</div>
-                        <div class="detail-value">$${payment.amount}</div>
-                    </div>
-                    <div class="detail-item">
-                        <div class="detail-label">Método</div>
-                        <div class="detail-value">${payment.method}</div>
-                    </div>
-                </div>
-                <div class="payment-actions">
-                    ${payment.status === 'pending' ? `
-                        <button class="btn-primary" onclick="clientDashboard.payPending(${payment.id})">Pagar</button>
-                    ` : `
-                        <button class="btn-secondary" onclick="clientDashboard.viewPaymentDetails(${payment.id})">Ver Detalles</button>
-                    `}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    renderEmptyPaymentHistory() {
-        const container = document.getElementById('paymentCardsContainer');
-        if (container) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-credit-card"></i>
-                    <h3>No hay historial de pagos</h3>
-                    <p>Aquí verás los pagos de tus reservas cuando existan.</p>
-                </div>`;
-        }
-    }
 
     setupProfileForm() {
         const profileForm = document.getElementById('profileForm');
@@ -534,7 +557,20 @@ Total: $${totalAmount}
             form.firstName.value = firstName || '';
             form.lastName.value = lastName || '';
             form.email.value = user.email || '';
-            // Other fields would be loaded from a more complete user profile
+            // Campos extendidos almacenados
+            try {
+                const extended = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+                if (extended.phone) form.phone.value = extended.phone;
+                if (extended.address) form.address.value = extended.address;
+                if (extended.birthDate) form.birthDate.value = extended.birthDate;
+                if (extended.city) form.city.value = extended.city;
+                if (extended.country) form.country.value = extended.country;
+                const notifEmailToggle = document.getElementById('notifEmailToggle');
+                if (notifEmailToggle && typeof extended.notifEmail !== 'undefined') notifEmailToggle.checked = !!extended.notifEmail;
+                const twoFactorToggle = document.getElementById('twoFactorToggle');
+                if (twoFactorToggle && typeof extended.twoFactor !== 'undefined') twoFactorToggle.checked = !!extended.twoFactor;
+            } catch(e) {}
+            this.updateProfileBadges();
         }
     }
 
@@ -547,7 +583,10 @@ Total: $${totalAmount}
             lastName: formData.get('lastName'),
             email: formData.get('email'),
             phone: formData.get('phone'),
-            address: formData.get('address')
+            address: formData.get('address'),
+            birthDate: formData.get('birthDate'),
+            city: formData.get('city'),
+            country: formData.get('country')
         };
 
         try {
@@ -559,6 +598,10 @@ Total: $${totalAmount}
             user.name = `${profileData.firstName} ${profileData.lastName}`;
             user.email = profileData.email;
             localStorage.setItem('user', JSON.stringify(user));
+            const prev = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+            const merged = { ...prev, phone:profileData.phone, address:profileData.address, birthDate:profileData.birthDate, city:profileData.city, country:profileData.country };
+            localStorage.setItem('profileExtended', JSON.stringify(merged));
+            this.updateProfileBadges();
             
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -581,14 +624,14 @@ Total: $${totalAmount}
 
     // Action handlers
     async cancelReservation(reservationId) {
-        if (confirm('¿Seguro que deseas cancelar esta reserva?')) {
+        if (confirm('¿Seguro que deseas anular esta reserva?')) {
             try {
                 await apiService.cancelReservation(reservationId);
-                showNotification('Reserva cancelada correctamente', 'success');
+                showNotification('Reserva anulada correctamente', 'success');
                 await this.loadMyReservations();
             } catch (error) {
-                console.error('Error al cancelar la reserva:', error);
-                showNotification('Error al cancelar la reserva', 'error');
+                console.error('Error al anular la reserva:', error);
+                showNotification('Error al anular la reserva', 'error');
             }
         }
     }
@@ -601,13 +644,6 @@ Total: $${totalAmount}
         }
     }
 
-    viewPaymentDetails(paymentId) {
-        const payment = this.data.paymentHistory.find(p => p.id === paymentId);
-        if (payment) {
-            // Show payment details modal (to be implemented)
-            alert(`Detalles del Pago:\n\nID: ${payment.id}\nFecha: ${this.formatDate(payment.date)}\nMonto: $${payment.amount}\nMétodo: ${payment.method}\nEstado: ${this.getStatusLabel(payment.status)}`);
-        }
-    }
 
     showChangePasswordModal() {
         // Show change password modal (to be implemented)
@@ -623,8 +659,9 @@ Total: $${totalAmount}
         const map = {
             confirmed: 'confirmada',
             pending: 'pendiente',
-            cancelled: 'cancelada',
-            canceled: 'cancelada', // por si acaso
+            anulada: 'anulada',
+            cancelled: 'anulada',
+            canceled: 'anulada', // por compatibilidad
             completed: 'completado',
             failed: 'fallido',
             refunded: 'reembolsado'
@@ -632,21 +669,61 @@ Total: $${totalAmount}
         return map[status] || this.capitalizeFirst(status);
     }
 
-    async payPending(paymentId) {
-        // Simula pago y actualiza estado
-        const payment = this.data.paymentHistory.find(p => p.id === paymentId);
-        if (!payment) return;
-        if (payment.status !== 'pending') return;
-        try {
-            showNotification('Procesando pago...', 'info');
-            await new Promise(r => setTimeout(r, 800));
-            payment.status = 'completed';
-            showNotification('Pago completado', 'success');
-            this.renderPaymentHistory();
-        } catch (e) {
-            showNotification('Error al procesar el pago', 'error');
-        }
+    normalizeStatus(raw) {
+        if (!raw) return 'pending';
+        const s = raw.toLowerCase();
+        if (s.startsWith('conf')) return 'confirmed';
+        if (s.startsWith('pend')) return 'pending';
+        if (s.startsWith('anul')) return 'anulada';
+        if (s.startsWith('canc')) return 'anulada'; // soportar históricos cancelada/cancelled
+        if (s.startsWith('compl')) return 'completed';
+        return s;
     }
+
+    setupReservationFilters() {
+        const container = document.getElementById('clientReservationFilters');
+        if (!container) return;
+        container.addEventListener('click', (e)=>{
+            const btn = e.target.closest('.qf-btn');
+            if (!btn) return;
+            const filter = btn.getAttribute('data-filter');
+            if (!filter) return;
+            this.reservationsFilter = filter;
+            container.querySelectorAll('.qf-btn').forEach(b=>b.classList.remove('active'));
+            btn.classList.add('active');
+            this.renderMyReservations();
+        });
+    }
+
+    simulatePay(reservationId) {
+        showNotification('Pago procesado (simulado)', 'success');
+        // Simplemente vuelve a renderizar para mostrar como completado
+        const res = this.data.reservations.find(r=>r.id===reservationId);
+        if (res) res.status = res.status; // no cambiamos reserva, solo refrescamos UI
+        this.renderMyReservations();
+    }
+
+    updateProfileBadges() {
+        try {
+            const extended = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+            const fields = ['phone','address','birthDate','city','country'];
+            const filled = fields.filter(f => extended[f] && extended[f].toString().trim() !== '').length;
+            const badge = document.getElementById('personalStatusBadge');
+            if (badge) {
+                if (filled === fields.length) { badge.textContent='Completo'; badge.classList.remove('warning'); }
+                else if (filled >= 3) { badge.textContent='Parcial'; badge.classList.remove('warning'); }
+                else { badge.textContent='Incompleto'; badge.classList.add('warning'); }
+            }
+            const notifBadge = document.getElementById('notifBadge');
+            if (notifBadge) notifBadge.textContent = extended.notifEmail ? 'Activo' : 'Inactivo';
+            const securityBadge = document.getElementById('securityBadge');
+            if (securityBadge) {
+                if (extended.twoFactor) { securityBadge.textContent='Protegido'; securityBadge.classList.remove('warning'); }
+                else { securityBadge.textContent='Revisar'; securityBadge.classList.add('warning'); }
+            }
+        } catch(e) {}
+    }
+
 
     formatDate(dateString) {
         return new Date(dateString).toLocaleDateString();
@@ -711,6 +788,21 @@ const clientDashboard = new ClientDashboard();
 // Initialize client dashboard
 function initializeClientDashboard() {
     clientDashboard.init();
+    document.addEventListener('change', (e)=>{
+        const t = e.target;
+        if (t && t.id === 'notifEmailToggle') {
+            const extended = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+            extended.notifEmail = t.checked; localStorage.setItem('profileExtended', JSON.stringify(extended));
+            clientDashboard.updateProfileBadges();
+            showNotification('Preferencia de email actualizada', 'success');
+        }
+        if (t && t.id === 'twoFactorToggle') {
+            const extended = JSON.parse(localStorage.getItem('profileExtended')||'{}');
+            extended.twoFactor = t.checked; localStorage.setItem('profileExtended', JSON.stringify(extended));
+            clientDashboard.updateProfileBadges();
+            showNotification('Estado 2FA actualizado', 'success');
+        }
+    });
 }
 
 // Make functions globally available for onclick handlers
