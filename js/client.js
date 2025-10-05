@@ -458,6 +458,94 @@ Total: $${totalAmount}
                     status: 'confirmed',
                     guestName: 'Cliente Demo',
                     createdAt: '2025-01-10T10:00:00Z'
+                },
+                {
+                    id: 2,
+                    roomNumber: '205',
+                    roomType: 'Deluxe',
+                    checkIn: '2025-02-10',
+                    checkOut: '2025-02-12',
+                    totalAmount: 320.00,
+                    status: 'pending',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-02-01T09:00:00Z'
+                },
+                {
+                    id: 3,
+                    roomNumber: '302',
+                    roomType: 'Villa Familiar',
+                    checkIn: '2025-03-05',
+                    checkOut: '2025-03-10',
+                    totalAmount: 1200.00,
+                    status: 'cancelled',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-02-28T11:00:00Z'
+                },
+                {
+                    id: 4,
+                    roomNumber: '102',
+                    roomType: 'Standard',
+                    checkIn: '2025-04-01',
+                    checkOut: '2025-04-03',
+                    totalAmount: 200.00,
+                    status: 'confirmed',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-03-25T14:00:00Z'
+                },
+                {
+                    id: 5,
+                    roomNumber: '501',
+                    roomType: 'Suite Oceanview',
+                    checkIn: '2025-05-20',
+                    checkOut: '2025-05-25',
+                    totalAmount: 900.00,
+                    status: 'pending',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-05-10T16:00:00Z'
+                },
+                {
+                    id: 6,
+                    roomNumber: '205',
+                    roomType: 'Deluxe',
+                    checkIn: '2025-06-15',
+                    checkOut: '2025-06-18',
+                    totalAmount: 480.00,
+                    status: 'completed',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-06-01T12:00:00Z'
+                },
+                {
+                    id: 7,
+                    roomNumber: '302',
+                    roomType: 'Villa Familiar',
+                    checkIn: '2025-07-10',
+                    checkOut: '2025-07-15',
+                    totalAmount: 1500.00,
+                    status: 'confirmed',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-07-01T10:00:00Z'
+                },
+                {
+                    id: 8,
+                    roomNumber: '102',
+                    roomType: 'Standard',
+                    checkIn: '2025-08-05',
+                    checkOut: '2025-08-08',
+                    totalAmount: 300.00,
+                    status: 'pending',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-07-30T08:00:00Z'
+                },
+                {
+                    id: 9,
+                    roomNumber: '501',
+                    roomType: 'Suite Oceanview',
+                    checkIn: '2025-09-12',
+                    checkOut: '2025-09-15',
+                    totalAmount: 600.00,
+                    status: 'cancelled',
+                    guestName: 'Cliente Demo',
+                    createdAt: '2025-09-01T13:00:00Z'
                 }
             ];
             this.renderMyReservations();

@@ -41,6 +41,10 @@
         <p class="login-subtitle">Pacific Reef Hotel</p>
   <form id="registerForm" class="login-form" onsubmit="return false;">
           <div class="form-group">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" placeholder="Nombre de usuario" required />
+          </div>
+          <div class="form-group">
             <label for="fullName">Nombre Completo</label>
             <input type="text" id="fullName" name="fullName" placeholder="Tu nombre completo" required />
           </div>
@@ -52,7 +56,7 @@
             <label for="password">Contraseña</label>
             <input type="password" id="password" name="password" placeholder="••••••" required />
           </div>
-          <a href="index.html" class="register-btn" id="registerBtn">Crear Cuenta</a>
+          <button type="submit" class="register-btn" id="registerBtn">Crear Cuenta</button>
         </form>
         <div class="alt-action">
           <span>¿Ya tienes cuenta? <a href="index.html">Inicia Sesión</a></span>
@@ -64,5 +68,57 @@
     </div>
   </div>
   <script>// No hay validaciones: el enlace redirige directamente al index.</script>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const name = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      if (!username || !name || !email || !password) {
+        showNotification('Completa todos los campos', 'error');
+        return;
+      }
+      const payload = {
+        username,
+        name,
+        email,
+        password,
+        role: 'client',
+        status: 'activo'
+      };
+      try {
+        const res = await fetch('http://127.0.0.1:5000/api/usuarios', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        let data = {};
+        try {
+          data = await res.json();
+        } catch (jsonErr) {
+          // Si no es JSON, mostrar error genérico
+          showNotification('Error inesperado en el servidor', 'error');
+          return;
+        }
+        if (res.status === 201) {
+          showNotification('¡Registro exitoso! Redirigiendo...', 'success');
+          setTimeout(() => {
+            window.location.replace('index.html');
+          }, 1800);
+        } else {
+          showNotification(data.message || data.error || 'Error al registrar usuario', 'error');
+        }
+      } catch (err) {
+        showNotification('Error de conexión con el servidor', 'error');
+      }
+    });
+  </script>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/client.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -137,14 +137,133 @@ class AdminDashboard {
 
 
     async loadRooms() {
-        try {
-            const response = await apiService.getRooms(this.filters.rooms);
-            this.data.rooms = response.data || [];
-            this.renderRoomsCards();
-        } catch (error) {
-            console.error('Error loading rooms:', error);
-            this.renderRoomsCards(true);
-        }
+        const today = new Date().toISOString().split('T')[0];
+    const baseRooms = [
+            {
+                id: 1,
+                number: '101',
+                name: 'Suite Premium',
+                type: 'suite',
+                floor: 1,
+                status: 'available',
+                amenities: ['WiFi', 'Estacionamiento', 'Aire Acondicionado', 'Bañera Jacuzzi', 'Vista al Mar'],
+                capacity: 4,
+                basePrice: 450,
+                currentPrice: 450,
+                lastCleaned: '2025-10-04',
+                reservations: 2,
+                checkout: null
+            },
+            {
+                id: 2,
+                number: '102',
+                name: 'Habitación Deluxe',
+                type: 'deluxe',
+                floor: 2,
+                status: 'available',
+                amenities: ['WiFi', 'Estacionamiento', 'Aire Acondicionado', 'Minibar'],
+                capacity: 2,
+                basePrice: 280,
+                currentPrice: 280,
+                lastCleaned: '2025-10-03',
+                reservations: 1,
+                checkout: null
+            },
+            {
+                id: 3,
+                number: '103',
+                name: 'Habitación Standard',
+                type: 'standard',
+                floor: 1,
+                status: 'occupied',
+                amenities: ['WiFi', 'Aire Acondicionado', 'TV Cable'],
+                capacity: 2,
+                basePrice: 180,
+                currentPrice: 180,
+                lastCleaned: '2025-10-02',
+                reservations: 1,
+                checkout: '2025-10-05' // checkout hoy
+            },
+            {
+                id: 4,
+                number: '104',
+                name: 'Villa Familiar',
+                type: 'villa',
+                floor: 2,
+                status: 'available',
+                amenities: ['WiFi', 'Estacionamiento', 'Piscina Privada', 'Cocina Completa', 'Acceso a Playa'],
+                capacity: 6,
+                basePrice: 650,
+                currentPrice: 650,
+                lastCleaned: '2025-10-01',
+                reservations: 1,
+                checkout: null
+            },
+            // Adicionales
+            {
+                id: 5,
+                number: '105',
+                name: 'Habitación Deluxe Plus',
+                type: 'deluxe',
+                floor: 3,
+                status: 'maintenance',
+                amenities: ['WiFi', 'Aire Acondicionado', 'Minibar', 'Balcón'],
+                capacity: 2,
+                basePrice: 320,
+                currentPrice: 320,
+                lastCleaned: '2025-09-30',
+                reservations: 0,
+                checkout: null
+            },
+            {
+                id: 6,
+                number: '106',
+                name: 'Suite Ejecutiva',
+                type: 'suite',
+                floor: 4,
+                status: 'cleaning',
+                amenities: ['WiFi', 'Estacionamiento', 'Aire Acondicionado', 'Jacuzzi'],
+                capacity: 3,
+                basePrice: 500,
+                currentPrice: 500,
+                lastCleaned: today,
+                reservations: 0,
+                checkout: null
+            },
+            // Habitaciones fuera de servicio
+            {
+                id: 7,
+                number: '107',
+                name: 'Habitación Fuera de Servicio 1',
+                type: 'standard',
+                floor: 1,
+                status: 'out_of_service',
+                amenities: ['WiFi', 'Aire Acondicionado'],
+                capacity: 2,
+                basePrice: 150,
+                currentPrice: 150,
+                lastCleaned: '2025-09-28',
+                reservations: 0,
+                checkout: null
+            },
+            {
+                id: 8,
+                number: '108',
+                name: 'Habitación Fuera de Servicio 2',
+                type: 'deluxe',
+                floor: 2,
+                status: 'out_of_service',
+                amenities: ['WiFi', 'Minibar'],
+                capacity: 2,
+                basePrice: 220,
+                currentPrice: 220,
+                lastCleaned: '2025-09-27',
+                reservations: 0,
+                checkout: null
+            }
+        ];
+        this.data.rooms = baseRooms;
+        this.renderRoomsCards();
     }
 
     /* ================= REPORTES ================= */
@@ -299,16 +418,127 @@ class AdminDashboard {
         }
 
     async loadReservations() {
-        try {
-            const response = await apiService.getReservations(this.filters.reservations);
-            this.data.reservations = response.data || [];
-            this.updateReservationStats();
-            this.renderReservationsTable();
-            this.setupReservationFiltersOnce();
-        } catch (error) {
-            console.error('Error loading reservations:', error);
-            this.renderReservationsTable(true);
-        }
+        // Mock: 20 reservas, incluyendo las del cliente demo y otras 10
+        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date(Date.now()+86400000).toISOString().split('T')[0];
+        // Cliente Demo (5 reservas ejemplo)
+        const clienteDemoReservas = [
+            {
+                id: 1,
+                code: 'PR-2025-001',
+                userName: 'Cliente Demo',
+                roomNumber: '101',
+                checkIn: '2025-09-28',
+                checkOut: '2025-09-30',
+                guests: 2,
+                totalAmount: 400,
+                status: 'Completada',
+                payment: 'Pagado'
+            },
+            {
+                id: 2,
+                code: 'PR-2025-002',
+                userName: 'Cliente Demo',
+                roomNumber: '102',
+                checkIn: '2025-10-01',
+                checkOut: '2025-10-03',
+                guests: 1,
+                totalAmount: 250,
+                status: 'Completada',
+                payment: 'Pagado'
+            },
+            {
+                id: 3,
+                code: 'PR-2025-003',
+                userName: 'Cliente Demo',
+                roomNumber: '103',
+                checkIn: today,
+                checkOut: tomorrow,
+                guests: 2,
+                totalAmount: 300,
+                status: 'Confirmada',
+                payment: 'Pendiente'
+            },
+            {
+                id: 4,
+                code: 'PR-2025-004',
+                userName: 'Cliente Demo',
+                roomNumber: '104',
+                checkIn: tomorrow,
+                checkOut: '2025-10-07',
+                guests: 3,
+                totalAmount: 600,
+                status: 'Pendiente',
+                payment: 'Pendiente'
+            },
+            {
+                id: 5,
+                code: 'PR-2025-005',
+                userName: 'Cliente Demo',
+                roomNumber: '105',
+                checkIn: '2025-09-20',
+                checkOut: '2025-09-22',
+                guests: 1,
+                totalAmount: 200,
+                status: 'Anulada',
+                payment: 'N/A'
+            }
+        ];
+
+        // 15 reservas de otros clientes
+        const nombres = [
+            'Cristóbal Silva', 'Antonia Correa', 'Javiera Ríos', 'Felipe Torres', 'Camila Soto',
+            'Ignacio Paredes', 'Valentina Díaz', 'Matías Fuentes', 'Sofía Herrera', 'Diego Castro',
+            'Francisca Muñoz', 'Tomás González', 'Martina López', 'Benjamín Reyes', 'Isidora Vargas'
+        ];
+        // Usar solo habitaciones existentes (101-108)
+        const roomNumbers = ['101','102','103','104','105','106','107','108'];
+        const reservasExtra = nombres.map((nombre, idx) => {
+            // Fechas variadas: 2 hoy, 2 mañana, resto en septiembre/octubre
+            let checkIn, checkOut, status;
+            if (idx < 2) {
+                checkIn = today;
+                checkOut = tomorrow;
+                status = 'Confirmada';
+            } else if (idx < 4) {
+                checkIn = tomorrow;
+                checkOut = '2025-10-07';
+                status = 'Pendiente';
+            } else if (idx === 4) {
+                checkIn = '2025-09-15';
+                checkOut = '2025-09-18';
+                status = 'Anulada';
+            } else if (idx === 5) {
+                checkIn = '2025-09-25';
+                checkOut = '2025-09-28';
+                status = 'Anulada';
+            } else {
+                checkIn = `2025-09-${10+idx}`;
+                checkOut = `2025-09-${12+idx}`;
+                status = 'Completada';
+            }
+            // Asignar habitación existente de forma cíclica
+            const roomNumber = roomNumbers[idx % roomNumbers.length];
+            return {
+                id: 6+idx,
+                code: `PR-2025-${String(6+idx).padStart(3,'0')}`,
+                userName: nombre,
+                roomNumber,
+                checkIn,
+                checkOut,
+                guests: 1 + (idx%3),
+                totalAmount: 200 + (idx*50),
+                status,
+                payment: status==='Completada'?'Pagado':(status==='Anulada'?'N/A':'Pendiente')
+            };
+        });
+
+        // Unir todas y limitar a 20
+        const reservasFinal = [...clienteDemoReservas, ...reservasExtra].slice(0,20);
+        this.data.reservations = reservasFinal;
+        this.updateReservationStats();
+        this.renderReservationsTable();
+        this.setupReservationFiltersOnce();
     }
     setupReservationFiltersOnce(){
         if(this._reservationFiltersSetup) return;
@@ -468,8 +698,23 @@ class AdminDashboard {
 
     async loadUsers() {
         try {
-            const response = await apiService.getUsers(this.filters.users);
-            this.data.users = response.data || [];
+            // Mock: 20 usuarios para gestión
+            const nombresMock = [
+                'Administrador Hotel', 'Cliente Demo', 'Cristóbal Silva', 'Antonia Correa', 'Javiera Ríos',
+                'Felipe Torres', 'Camila Soto', 'Ignacio Paredes', 'Valentina Díaz', 'Matías Fuentes',
+                'Sofía Herrera', 'Diego Castro', 'Francisca Muñoz', 'Tomás González', 'Martina López',
+                'Benjamín Reyes', 'Isidora Vargas', 'Pedro Ramírez', 'Laura Espinoza', 'Andrés Bravo'
+            ];
+            const usersMock = nombresMock.map((nombre, idx) => ({
+                id: idx+1,
+                username: nombre.toLowerCase().replace(/ /g, ''),
+                name: nombre,
+                email: `${nombre.toLowerCase().replace(/ /g, '.')}@mock.com`,
+                password: 'mock123',
+                role: idx === 0 ? 'admin' : 'client',
+                status: 'activo'
+            }));
+            this.data.users = usersMock;
             this.renderUsersTable();
             // Listener búsqueda
             const usInput = document.getElementById('userSearchInput');

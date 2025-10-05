@@ -89,9 +89,29 @@ def create_database():
     conn.commit()
 
     # Insertar datos ficticios
+    # Usuarios mock del frontend (20 usuarios)
     usuarios = [
         ("admin", "Administrador Hotel", "admin@pacificreef.com", "admin123", "admin", "activo"),
         ("client", "Cliente Demo", "client@pacificreef.com", "client123", "client", "activo"),
+        ("csilva", "Cristóbal Silva", "csilva@demo.com", "demo123", "client", "activo"),
+        ("acorrea", "Antonia Correa", "acorrea@demo.com", "demo123", "client", "activo"),
+        ("jrios", "Javiera Ríos", "jrios@demo.com", "demo123", "client", "activo"),
+        ("ftorres", "Felipe Torres", "ftorres@demo.com", "demo123", "client", "activo"),
+        ("csoto", "Camila Soto", "csoto@demo.com", "demo123", "client", "activo"),
+        ("iparedes", "Ignacio Paredes", "iparedes@demo.com", "demo123", "client", "activo"),
+        ("vdiaz", "Valentina Díaz", "vdiaz@demo.com", "demo123", "client", "activo"),
+        ("mfuentes", "Matías Fuentes", "mfuentes@demo.com", "demo123", "client", "activo"),
+        ("sherrera", "Sofía Herrera", "sherrera@demo.com", "demo123", "client", "activo"),
+        ("dcastro", "Diego Castro", "dcastro@demo.com", "demo123", "client", "activo"),
+        ("fmunoz", "Francisca Muñoz", "fmunoz@demo.com", "demo123", "client", "activo"),
+        ("tgonzalez", "Tomás González", "tgonzalez@demo.com", "demo123", "client", "activo"),
+        ("mlopez", "Martina López", "mlopez@demo.com", "demo123", "client", "activo"),
+        ("breyes", "Benjamín Reyes", "breyes@demo.com", "demo123", "client", "activo"),
+        ("ivargas", "Isidora Vargas", "ivargas@demo.com", "demo123", "client", "activo"),
+        ("extra1", "Usuario Extra 1", "extra1@demo.com", "demo123", "client", "activo"),
+        ("extra2", "Usuario Extra 2", "extra2@demo.com", "demo123", "client", "activo"),
+        ("extra3", "Usuario Extra 3", "extra3@demo.com", "demo123", "client", "activo"),
+        ("extra4", "Usuario Extra 4", "extra4@demo.com", "demo123", "client", "activo"),
     ]
     cursor.executemany("""
         INSERT INTO usuarios (username, nombre, email, password, rol, estado)
@@ -108,22 +128,44 @@ def create_database():
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, usuario_extend)
 
+    # Habitaciones mock del frontend (8 habitaciones)
     habitaciones = [
-        ("501", "Suite Oceanview Premium", "suite", 5, "disponible", 4, 450, 450, "2025-09-18", 3, "Vista al mar,Balcón privado,Jacuzzi,+2 más"),
-        ("502", "Suite Oceanview Premium", "suite", 5, "ocupada", 4, 450, 450, "2025-09-16", 5, "Vista al mar,Balcón privado,Jacuzzi,+2 más"),
-        ("205", "Hab. Deluxe", "deluxe", 2, "mantenimiento", 2, 280, 315, "2025-09-17", 2, "Vista parcial al mar,Balcón,WiFi,+1 más"),
-        ("102", "Hab. Standard", "standard", 1, "limpieza", 2, 180, 200, "2025-09-19", 1, "WiFi,Aire acondicionado,TV por cable"),
-        ("302", "Villa Familiar", "villa", 3, "fuera de servicio", 6, 650, 650, "2025-09-14", 0, "Vista al mar,Piscina privada,Cocina completa,+2 más"),
+        ("101", "Suite Premium", "suite", 1, "disponible", 4, 450, 450, "2025-10-04", 2, "WiFi,Estacionamiento,Aire Acondicionado,Bañera Jacuzzi,Vista al Mar"),
+        ("102", "Habitación Deluxe", "deluxe", 2, "disponible", 2, 280, 280, "2025-10-03", 1, "WiFi,Estacionamiento,Aire Acondicionado,Minibar"),
+        ("103", "Habitación Standard", "standard", 1, "ocupada", 2, 180, 180, "2025-10-02", 1, "WiFi,Aire Acondicionado,TV Cable"),
+        ("104", "Villa Familiar", "villa", 2, "disponible", 6, 650, 650, "2025-10-01", 1, "WiFi,Estacionamiento,Piscina Privada,Cocina Completa,Acceso a Playa"),
+        ("105", "Habitación Deluxe Plus", "deluxe", 3, "mantenimiento", 2, 320, 320, "2025-09-30", 0, "WiFi,Aire Acondicionado,Minibar,Balcón"),
+        ("106", "Suite Ejecutiva", "suite", 4, "limpieza", 3, 500, 500, "2025-10-05", 0, "WiFi,Estacionamiento,Aire Acondicionado,Jacuzzi"),
+        ("107", "Habitación Fuera de Servicio 1", "standard", 1, "fuera de servicio", 2, 150, 150, "2025-09-28", 0, "WiFi,Aire Acondicionado"),
+        ("108", "Habitación Fuera de Servicio 2", "deluxe", 2, "fuera de servicio", 2, 220, 220, "2025-09-27", 0, "WiFi,Minibar"),
     ]
     cursor.executemany("""
         INSERT INTO habitaciones (numero, nombre, tipo, piso, estado, capacidad, precio_base, precio_actual, ultima_limpieza, reservas_pendientes, amenidades)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, habitaciones)
 
+    # Reservas mock del frontend (20 reservas)
     reservas = [
-        ("PR-2025-016", 2, 4, "2025-09-28", "2025-09-30", 320, "Pago Pendiente", "pendiente"),
-        ("PR-2025-017", 2, 1, "2025-10-10", "2025-10-12", 900, "Pagado", "confirmada"),
-        ("PR-2025-018", 2, 2, "2025-10-15", "2025-10-18", 1350, "Pago Pendiente", "pendiente"),
+        ("PR-2025-001", 2, 1, "2025-09-28", "2025-09-30", 400, "Pagado", "completada"),
+        ("PR-2025-002", 2, 2, "2025-10-01", "2025-10-03", 250, "Pagado", "completada"),
+        ("PR-2025-003", 2, 3, "2025-10-05", "2025-10-06", 300, "Pago Pendiente", "confirmada"),
+        ("PR-2025-004", 2, 4, "2025-10-06", "2025-10-07", 600, "Pago Pendiente", "pendiente"),
+        ("PR-2025-005", 2, 5, "2025-09-20", "2025-09-22", 200, "N/A", "anulada"),
+        ("PR-2025-006", 3, 1, "2025-10-05", "2025-10-06", 250, "Pago Pendiente", "confirmada"),
+        ("PR-2025-007", 4, 2, "2025-10-06", "2025-10-07", 300, "Pago Pendiente", "pendiente"),
+        ("PR-2025-008", 5, 3, "2025-09-15", "2025-09-18", 350, "N/A", "anulada"),
+        ("PR-2025-009", 6, 4, "2025-09-25", "2025-09-28", 400, "N/A", "anulada"),
+        ("PR-2025-010", 7, 5, "2025-09-16", "2025-09-18", 450, "Pagado", "completada"),
+        ("PR-2025-011", 8, 6, "2025-09-17", "2025-09-19", 500, "Pagado", "completada"),
+        ("PR-2025-012", 9, 7, "2025-09-18", "2025-09-20", 550, "Pagado", "completada"),
+        ("PR-2025-013", 10, 8, "2025-09-19", "2025-09-21", 600, "Pagado", "completada"),
+        ("PR-2025-014", 11, 1, "2025-09-20", "2025-09-22", 650, "Pagado", "completada"),
+        ("PR-2025-015", 12, 2, "2025-09-21", "2025-09-23", 700, "Pagado", "completada"),
+        ("PR-2025-016", 13, 3, "2025-09-22", "2025-09-24", 750, "Pagado", "completada"),
+        ("PR-2025-017", 14, 4, "2025-09-23", "2025-09-25", 800, "Pagado", "completada"),
+        ("PR-2025-018", 15, 5, "2025-09-24", "2025-09-26", 850, "Pagado", "completada"),
+        ("PR-2025-019", 16, 6, "2025-09-25", "2025-09-27", 900, "Pagado", "completada"),
+        ("PR-2025-020", 17, 7, "2025-09-26", "2025-09-28", 950, "Pagado", "completada"),
     ]
     cursor.executemany("""
         INSERT INTO reservas (codigo, usuario_id, habitacion_id, fecha_inicio, fecha_fin, monto_total, pago, estado)

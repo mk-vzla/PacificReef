@@ -179,14 +179,28 @@ def get_usuarios():
 def create_usuario():
     data = request.json
     conn = get_db_connection()
-    cur = conn.execute(
-        'INSERT INTO usuarios (nombre, email, password, rol, estado) VALUES (?, ?, ?, ?, ?)',
-        (data.get('name'), data.get('email'), 'default123', data.get('role'), data.get('status'))
-    )
-    conn.commit()
-    user_id = cur.lastrowid
-    conn.close()
-    return jsonify({ 'message': 'Usuario creado', 'data': { 'id': user_id } }), 201
+    try:
+        cur = conn.execute(
+            'INSERT INTO usuarios (username, nombre, email, password, rol, estado) VALUES (?, ?, ?, ?, ?, ?)',
+            (
+                data.get('username'),
+                data.get('name'),
+                data.get('email'),
+                data.get('password'),
+                data.get('role'),
+                data.get('status')
+            )
+        )
+        conn.commit()
+        user_id = cur.lastrowid
+        conn.close()
+        return jsonify({ 'message': 'Usuario creado', 'data': { 'id': user_id } }), 201
+    except Exception as e:
+        conn.rollback()
+        conn.close()
+        if 'UNIQUE constraint failed' in str(e):
+            return jsonify({ 'message': 'El usuario o email ya existe.' }), 400
+        return jsonify({ 'message': 'Error al registrar usuario.' }), 500
 
 # Update user
 @app.route('/api/usuarios/<int:user_id>', methods=['PUT'])
