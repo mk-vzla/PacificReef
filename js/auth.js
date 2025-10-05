@@ -31,35 +31,29 @@ class AuthManager {
         }
     }
 
-    login(username, password, userType) {
-        console.log('=== LOGIN ATTEMPT ===');
-        console.log('Username:', username);
-        console.log('Password:', password);
-        console.log('UserType:', userType);
-        
-        // CREDENCIALES HARDCODEADAS
-        if (username === 'admin' && password === 'admin123' && userType === 'admin') {
-            console.log('✅ ADMIN LOGIN SUCCESS');
-            this.currentUser = { role: 'admin', name: 'Administrador Hotel', email: 'admin@pacificreef.com' };
-            this.isAuthenticated = true;
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userRole', 'admin');
-            localStorage.setItem('user', JSON.stringify(this.currentUser));
-            return { success: true, role: 'admin' };
+    async login(username, password, userType) {
+        console.log('=== LOGIN ATTEMPT (API) ===');
+        try {
+            const res = await fetch('http://127.0.0.1:5000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: username, password, role: userType })
+            });
+            const result = await res.json();
+            if (result.success) {
+                this.currentUser = result.user;
+                this.isAuthenticated = true;
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('userRole', this.currentUser.role);
+                localStorage.setItem('user', JSON.stringify(this.currentUser));
+                return { success: true, role: this.currentUser.role };
+            } else {
+                return { success: false, message: result.message || 'Credenciales incorrectas' };
+            }
+        } catch (e) {
+            console.error('Login API error:', e);
+            return { success: false, message: 'Error de conexión con el servidor' };
         }
-        
-        if (username === 'client' && password === 'client123' && userType === 'client') {
-            console.log('✅ CLIENT LOGIN SUCCESS');
-            this.currentUser = { role: 'client', name: 'Cliente Demo', email: 'client@pacificreef.com' };
-            this.isAuthenticated = true;
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('userRole', 'client');
-            localStorage.setItem('user', JSON.stringify(this.currentUser));
-            return { success: true, role: 'client' };
-        }
-        
-        console.log('❌ LOGIN FAILED');
-        return { success: false, message: 'Credenciales incorrectas' };
     }
 
     logout() {
@@ -130,22 +124,22 @@ function handleLogin() {
         return false;
     }
     
-    const result = authManager.login(username, password, userType);
-    if (!result.success) {
-        showNotification(result.message || 'Error en el inicio de sesión', 'error');
-        return false;
-    }
-
-    showNotification('¡Inicio de sesión exitoso!', 'success');
-    console.log('🎯 REDIRIGIENDO A PÁGINA EXTERNA:', result.role);
-    setTimeout(() => {
-        if (result.role === 'admin') {
-            window.location.href = 'admin.html';
-        } else {
-            window.location.href = 'client.html';
+    authManager.login(username, password, userType).then(result => {
+        if (!result.success) {
+            showNotification(result.message || 'Error en el inicio de sesión', 'error');
+            return false;
         }
-    }, 300);
-    return true;
+        showNotification('¡Inicio de sesión exitoso!', 'success');
+        console.log('🎯 REDIRIGIENDO A PÁGINA EXTERNA:', result.role);
+        setTimeout(() => {
+            if (result.role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = 'client.html';
+            }
+        }, 300);
+        return true;
+    });
 }
 
 // Ya no se maneja vista embebida; index sólo contiene el login

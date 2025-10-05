@@ -18,7 +18,7 @@
     "files.exclude": {
         "backend/**": false,
         "analytics/**": true,
-        "database/**": true,
+        "database/**": false,
         "**/.metadata": true,
         "**/bin": true,
         "**/target": true,
