@@ -23,9 +23,39 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--light-color);
+    /* background-color eliminado para mostrar la imagen de fondo */
     color: var(--dark-color);
     line-height: 1.6;
+        background-image: url('https://trello-backgrounds.s3.amazonaws.com/SharedBackground/2560x1707/65eaf65bdb6c3d81abb73a0689c5d87a/photo-1551882547-ff40c63fe5fa.webp') !important;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-position: center center !important;
+        min-height: 100vh !important;
+        /* Eliminar filtro para no oscurecer el contenido */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 0;
+    pointer-events: none;
+}
+body > * {
+    position: relative;
+    z-index: 1;
+}
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.4);
+        z-index: 0;
+        pointer-events: none;
+    }
+    body > * {
+        position: relative;
+        z-index: 1;
+    }
 }
 
 /* View Management */
@@ -82,7 +112,7 @@ body {
 }
 
 .card {
-    background: white;
+    background: rgba(20, 20, 40, 0.7); /* semitransparente, oscuro y legible */
     border-radius: var(--border-radius);
     padding: 24px;
     box-shadow: var(--shadow);

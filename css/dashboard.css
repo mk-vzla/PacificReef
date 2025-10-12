@@ -3,7 +3,7 @@
 #clientDashboard {
     display: flex;
     height: 100vh;
-    background-color: #f8fafc;
+    background: none !important;
 }
 
 /* Sidebar Styles */
@@ -109,7 +109,7 @@
 }
 
 .top-bar {
-    background: white;
+    background: none !important;
     padding: 20px 32px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
